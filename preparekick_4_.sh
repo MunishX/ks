@@ -1,5 +1,46 @@
 #!/bin/sh
 
+######################## IP START ###########################
+
+        MAIN_IP="$(hostname -I)"
+        echo ""
+        echo ""
+
+   while [[ $IP_CORRECT = "" ]]; do # to be replaced with regex  
+       read -p "(1/2) SERVER MAIN IP is ${MAIN_IP} (y/n) : " IP_CORRECT
+       #$MAIN_IP
+    done
+
+if [ $IP_CORRECT != "y" ]; then
+   read -p "SERVER IP : " MAIN_IP
+   #exit 1
+   
+      IP_CORRECT=
+      while [[ $IP_CORRECT = "" ]]; do # to be replaced with regex       
+       read -p "SERVER IP is ${MAIN_IP} (y/n) : " IP_CORRECT
+       #$MAIN_IP
+      done
+fi
+
+if [ $IP_CORRECT != "y" ]; then
+   #read -p "SERVER IP : " MAIN_IP
+   echo "Error!... Try Again!"
+   exit 1
+fi
+
+########
+SET_ROOT=$2
+   while [[ $SET_ROOT = "" ]]; do # to be replaced with regex
+       read -p "(2/2) Enter GRUB Set_Root for /boot (md1): " SET_ROOT
+    done
+
+VNC_PASS=$3
+   while [[ $VNC_PASS = "" ]]; do # to be replaced with regex
+       read -p "(3/3) Enter VNC_PASS (Info : VNC PORT : 5500): " VNC_PASS
+    done
+
+######################## IP END ###########################
+
 echo "### Getting vmlinux and initrd.img ###"
 mkdir -p /boot/
 rm -rf /boot/vmlinuz
@@ -14,11 +55,12 @@ echo "### Setting content in /etc/grub.d/40_custom ###"
 ##  ip=10.0.0.10
 ## ip=dhcp
 ## nano /etc/fstab  for hd serial for /boot/
+##     set root=(hd0,0)
 
 echo """
 menuentry \"Install CentOS 7\" {
-    set root=(hd0,0)
-    linux /vmlinuz vncconnect=81.2.240.249:5500 vncpassword=password headless netmask=255.255.255.0 gateway=10.0.0.1 dns=8.8.8.8 ksdevice=eth0 ip=81.2.240.249 ks=https://github.com/munishgaurav5/kickstart/raw/master/centos7minimal.cfg ksdevice=eth0 lang=en_US keymap=us 
+    set root=($SET_ROOT)
+    linux /vmlinuz vncconnect=$MAIN_IP:5500 vncpassword=$VNC_PASS headless netmask=255.255.255.0 gateway=10.0.0.1 dns=8.8.8.8 ksdevice=eth0 ip=$MAIN_IP ks=https://github.com/munishgaurav5/ks/raw/master/centos7_4_.cfg ksdevice=eth0 lang=en_US keymap=us 
     initrd /initrd.img
 }
 """ >> /etc/grub.d/40_custom
@@ -31,4 +73,6 @@ sed -i "s/GRUB_DEFAULT=\".*\"/GRUB_DEFAULT=\"Install CentOS 7\"/g" /etc/default/
 
 echo "### Make grub2 config ###"
 grub2-mkconfig --output=/boot/grub2/grub.cfg
+
+#reboot
 
