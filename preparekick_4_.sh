@@ -7,7 +7,7 @@
         echo ""
 
    while [[ $IP_CORRECT = "" ]]; do # to be replaced with regex  
-       read -p "(1/2) SERVER MAIN IP is ${MAIN_IP} (y/n) : " IP_CORRECT
+       read -p "(1/3) SERVER MAIN IP is ${MAIN_IP} (y/n) : " IP_CORRECT
        #$MAIN_IP
     done
 
@@ -31,7 +31,7 @@ fi
 ########
 SET_ROOT=$2
    while [[ $SET_ROOT = "" ]]; do # to be replaced with regex
-       read -p "(2/2) Enter GRUB Set_Root for /boot (md1): " SET_ROOT
+       read -p "(2/3) Enter GRUB Set_Root for /boot (md0): " SET_ROOT
     done
 
 VNC_PASS=$3
