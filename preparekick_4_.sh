@@ -54,7 +54,10 @@ curl -o /boot/initrd.img http://mirror.nl.leaseweb.net/centos/7/os/x86_64/isolin
 echo "### Setting content in /etc/grub.d/40_custom ###"
 ##  ip=10.0.0.10
 ## ip=dhcp
+
 ## nano /etc/fstab  for hd serial for /boot/
+## lsblk  (better)
+
 ##     set root=(hd0,0)
 
 echo """
