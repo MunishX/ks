@@ -31,7 +31,7 @@ fi
 ########
 SET_ROOT=$2
    while [[ $SET_ROOT = "" ]]; do # to be replaced with regex
-       read -p "(2/3) Enter GRUB Set_Root for /boot (md0): " SET_ROOT
+       read -p "(2/3) Enter GRUB Set_Root for /boot [lsblk] (md1) : " SET_ROOT
     done
 
 VNC_PASS=$3
