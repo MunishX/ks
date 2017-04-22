@@ -7,7 +7,7 @@
 
 #export INSTALL_SRV="http://KICKSTART_SRV_FQDN/"
 
-export KSURL="https://github.com/munishgaurav5/ks/raw/master/dedibox.cfg"
+export KSURL="https://github.com/munishgaurav5/ks/raw/master/auto_centos7_minimal.cfg"
 export DNS1=8.8.8.8
 export DNS2=8.8.4.4
 
