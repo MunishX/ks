@@ -3,6 +3,7 @@
 ######################## IP START ###########################
 
         MAIN_IP="$(hostname -I)"
+        MAIN_IP=${MAIN_IP//[[:blank:]]/}
         echo ""
         echo ""
 
