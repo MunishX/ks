@@ -41,6 +41,9 @@ VNC_PASS=$3
 
 ######################## IP END ###########################
 
+# yum install system-config-kickstart
+# ksvalidator kickstartfile.ks
+
 echo "### Getting vmlinux and initrd.img ###"
 mkdir -p /boot/
 rm -rf /boot/vmlinuz
