@@ -23,11 +23,12 @@ curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 
 #    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL
 # inst.vncconnect=${IPADDR}:5500 # inst.vnc inst.vncpassword=changeme headless
+# inst.vnc inst.vncpassword=changeme inst.headless  inst.lang=en_US inst.keymap=us
 
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     set root=(hd0,1)
-    linux /vmlinuz inst.vnc inst.vncpassword=changeme inst.headless net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.lang=en_US inst.keymap=us
+    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL
     initrd /initrd.img
 }
 EOF
