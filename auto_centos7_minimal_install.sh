@@ -40,6 +40,7 @@ grub2-mkconfig --output=/boot/grub2/grub.cfg
 
 echo ""
 echo ""
+echo " >>> Manually update 'IP, Gateway & Hostname' in kickstart config file .. <<<"
 echo "IP : $IPADDR"
 echo "Gateway : $GW"
 echo ""
