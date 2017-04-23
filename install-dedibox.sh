@@ -18,6 +18,8 @@ export IPADDR=$(ip a s eth0 |grep "inet "|awk '{print $2}'| awk -F '/' '{print $
 export PREFIX=$(ip a s eth0 |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
 export GW=$(ip route|grep default | awk '{print $3}')
 
+yum install nano wget zip unzip git sed curl -y
+
 curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
 curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 
