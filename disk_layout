@@ -10,11 +10,11 @@
 #volgroup rootvg01 pv.01
 #logvol / --fstype=ext4 --name=lv01 --vgname=rootvg01 --size=1 --grow
 
-#--location=mbr
-bootloader --location=partition --driveorder=sda
+bootloader --location=mbr --driveorder=sda
 zerombr
 clearpart --all --initlabel --drives=sda
 
+##########
 part boot.1 --size=512 --ondisk=sda
 part boot.2 --size=512 --ondisk=sda
 part swap.1 --size=512 --ondisk=sda
@@ -26,4 +26,8 @@ raid / --fstype ext4 --level=RAID0 --device=md0 disk.1 disk.2
 raid /boot --fstype ext4 --level=RAID0 --device=md1 boot.1 boot.2
 raid swap --fstype swap --level=RAID0 --device=md2 swap.1 swap.2
 
-#######
+#######  or
+
+part /boot --fstype="ext4" --size=1024 --ondisk=sda 
+part swap  --fstype="swap" --size=1024 --ondisk=sda 
+part /     --fstype="ext4" --size=1024 --grow --ondisk=sda 
