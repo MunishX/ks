@@ -46,7 +46,7 @@ grub2-mkconfig --output=/boot/grub2/grub.cfg
 
 echo ""
 echo ""
-echo " >>> Manually update 'IP, Gateway & Hostname' in kickstart config file .. <<<"
+echo "> Manually update 'IP, Gateway, Newtork_Interface(device) & Hostname' in kickstart config file.<"
 echo "IP : $IPADDR"
 echo "Gateway : $GW"
 echo "Newtork Interface : $NETWORK_INTERFACE_NAME"
