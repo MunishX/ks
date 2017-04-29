@@ -1,5 +1,7 @@
 #/bin/bash
 
+# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/install-dedibox.sh && chmod 777 install-dedibox.sh && ./install-dedibox.sh 
+
 ### NEW ###
 yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-release git sudo make cmake GeoIP sed at
 NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
