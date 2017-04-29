@@ -4,8 +4,8 @@
 
 ### NEW ###
 yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-release git sudo make cmake GeoIP sed at
-#NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
-NETWORK_INTERFACE_NAME="em22"
+NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
+#NETWORK_INTERFACE_NAME="em22"
 ###########
 
 # author: François Cami <fcami@fedoraproject.org>
@@ -45,7 +45,7 @@ echo ""
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$NETWORK_INTERFACE_NAME:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us net.ifnames=0 biosdevname=0 
+    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$NETWORK_INTERFACE_NAME:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
