@@ -27,18 +27,42 @@ curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 # inst.vncconnect=${IPADDR}:5500 # inst.vnc inst.vncpassword=changeme headless
 # inst.vnc inst.vncpassword=changeme inst.headless  inst.lang=en_US inst.keymap=us
 
+root_value=`grep "set root=" /boot/grub2/grub.cfg | head -1`
+echo "$root_value"
+sleep 5
+
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
-    set root=(hd0,1)
+    $root_value
     linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
 
-sed -i -e "s/GRUB_DEFAULT.*/GRUB_DEFAULT=\"reinstall\"/g" /etc/default/grub
+#sed -i -e "s/GRUB_DEFAULT.*/GRUB_DEFAULT=\"reinstall\"/g" /etc/default/grub
 
 grub2-mkconfig
 grub2-mkconfig --output=/boot/grub2/grub.cfg
+
+grubby --info=ALL
+
+sleep 5
+echo "Setting Up default Grub Entry ..."
+echo ""
+
+# install grub-customizer
+
+
+grubby --default-index
+grub2-set-default 'reinstall'
+grubby --default-index
+
+grubby --default-index
+grubby --set-default /boot/vmlinuz
+grubby --default-index
+
+
+
 
 echo ""
 echo ""
