@@ -1,5 +1,10 @@
 #/bin/bash
 
+### NEW ###
+yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-release git sudo make cmake GeoIP sed at
+NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
+###########
+
 # author: François Cami <fcami@fedoraproject.org>
 # License: MIT
 
@@ -14,8 +19,8 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.ircam.fr/pub/CentOS/7.2.1511/os/x86_64/"
 export MIRROR="http://mirror.nl.leaseweb.net/centos/7/os/x86_64/"
 
-export IPADDR=$(ip a s eth0 |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1}')
-export PREFIX=$(ip a s eth0 |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
+export IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1}')
+export PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
 export GW=$(ip route|grep default | awk '{print $3}')
 
 yum install nano wget zip unzip git sed curl -y
@@ -34,7 +39,7 @@ sleep 5
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$NETWORK_INTERFACE_NAME:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
@@ -73,6 +78,7 @@ echo ""
 echo " >>> Manually update 'IP, Gateway & Hostname' in kickstart config file .. <<<"
 echo "IP : $IPADDR"
 echo "Gateway : $GW"
+echo "Network Interface : $NETWORK_INTERFACE_NAME" 
 echo ""
 echo "DONE!"
 
