@@ -32,6 +32,8 @@ curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 # inst.vncconnect=${IPADDR}:5500 # inst.vnc inst.vncpassword=changeme headless
 # inst.vnc inst.vncpassword=changeme inst.headless  inst.lang=en_US inst.keymap=us
 
+echo ""
+echo ""
 root_value=`grep "set root=" /boot/grub2/grub.cfg | head -1`
 echo "$root_value"
 echo ""
