@@ -25,8 +25,6 @@ export IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| a
 export PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
 export GW=$(ip route|grep default | awk '{print $3}')
 
-yum install nano wget zip unzip git sed curl -y
-
 curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
 curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 
@@ -53,9 +51,10 @@ grub2-mkconfig --output=/boot/grub2/grub.cfg
 
 grubby --info=ALL
 
-sleep 5
 echo "Setting Up default Grub Entry ..."
 echo ""
+
+sleep 5
 
 # install grub-customizer
 
