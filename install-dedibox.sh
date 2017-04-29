@@ -34,7 +34,10 @@ curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 
 root_value=`grep "set root=" /boot/grub2/grub.cfg | head -1`
 echo "$root_value"
+echo ""
+echo ""
 sleep 5
+echo ""
 
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
@@ -51,10 +54,13 @@ grub2-mkconfig --output=/boot/grub2/grub.cfg
 
 grubby --info=ALL
 
+echo ""
+echo ""
 echo "Setting Up default Grub Entry ..."
 echo ""
 
 sleep 5
+echo ""
 
 # install grub-customizer
 
