@@ -52,17 +52,21 @@ echo ""
 
 # install grub-customizer
 
+### Permanent Boot Change
+#grubby --default-index
+#grub2-set-default 'reinstall'
+#grubby --default-index
 
+### Permanent Boot Change
+#grubby --default-index
+#grubby --set-default /boot/vmlinuz
+#grubby --default-index
+
+### One Time Boot Change
 grubby --default-index
-grub2-set-default 'reinstall'
+#grub-reboot 1
+grub2-reboot  "reinstall"
 grubby --default-index
-
-grubby --default-index
-grubby --set-default /boot/vmlinuz
-grubby --default-index
-
-
-
 
 echo ""
 echo ""
