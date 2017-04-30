@@ -27,28 +27,71 @@ export GW=$(ip route|grep default | awk '{print $3}')
 curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
 curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 
+
 #    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL
 # inst.vncconnect=${IPADDR}:5500 # inst.vnc inst.vncpassword=changeme headless
 # inst.vnc inst.vncpassword=changeme inst.headless  inst.lang=en_US inst.keymap=us
 
+
+echo ""
+echo ""
+root_value=`grep "set root=" /boot/grub2/grub.cfg | head -1`
+echo "$root_value"
+echo ""
+echo ""
+sleep 5
+echo ""
+
+Boot_device=${NETWORK_INTERFACE_NAME}
+#Boot_device="eth0"
+
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
-    set root=(hd0,1)
-    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$NETWORK_INTERFACE_NAME:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
+    $root_value
+    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
 
-sed -i -e "s/GRUB_DEFAULT.*/GRUB_DEFAULT=\"reinstall\"/g" /etc/default/grub
+
+#sed -i -e "s/GRUB_DEFAULT.*/GRUB_DEFAULT=\"reinstall\"/g" /etc/default/grub
 
 grub2-mkconfig
 grub2-mkconfig --output=/boot/grub2/grub.cfg
 
+grubby --info=ALL
+
 echo ""
 echo ""
-echo "> Manually update 'IP, Gateway, Newtork_Interface(device) & Hostname' in kickstart config file.<"
+echo "Setting Up default Grub Entry ..."
+echo ""
+
+sleep 5
+echo ""
+
+# install grub-customizer
+
+### Permanent Boot Change
+#grubby --default-index
+#grub2-set-default 'reinstall'
+#grubby --default-index
+
+### Permanent Boot Change
+#grubby --default-index
+#grubby --set-default /boot/vmlinuz
+#grubby --default-index
+
+### One Time Boot Change
+grubby --default-index
+#grub-reboot 1
+grub2-reboot  "reinstall"
+grubby --default-index
+
+echo ""
+echo ""
+echo " >>> Manually update 'IP, Gateway & Hostname' in kickstart config file .. <<<"
 echo "IP : $IPADDR"
 echo "Gateway : $GW"
-echo "Newtork Interface : $NETWORK_INTERFACE_NAME"
+echo "Network Interface : $NETWORK_INTERFACE_NAME" 
 echo ""
 echo "DONE!"
