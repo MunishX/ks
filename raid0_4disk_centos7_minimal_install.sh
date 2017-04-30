@@ -1,5 +1,8 @@
 #/bin/bash
 
+ cd /tmp && wget https://raw.githubusercontent.com/munishgaurav5/ks/master/raid0_4disk_centos7_minimal_install.sh && chmod 777 raid0_4disk_centos7_minimal_install.sh && ./raid0_4disk_centos7_minimal_install.sh 
+
+
 # author: François Cami <fcami@fedoraproject.org>
 # License: MIT
 
