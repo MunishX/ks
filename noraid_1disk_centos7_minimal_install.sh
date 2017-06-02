@@ -1,5 +1,6 @@
 #/bin/bash
 
+# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/noraid_1disk_centos7_minimal_install.sh && chmod 777 noraid_1disk_centos7_minimal_install.sh && ./noraid_1disk_centos7_minimal_install.sh
 # author: François Cami <fcami@fedoraproject.org>
 # License: MIT
 
