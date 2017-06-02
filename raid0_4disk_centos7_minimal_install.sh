@@ -9,7 +9,7 @@
 # see README.md
 
 #export INSTALL_SRV="http://KICKSTART_SRV_FQDN/"
-
+ 
 
 ### NEW ###
 yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-release git sudo make cmake GeoIP sed at
