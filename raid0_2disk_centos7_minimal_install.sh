@@ -1,6 +1,6 @@
 #/bin/bash
 
-# cd /tmp && wget https://raw.githubusercontent.com/munishgaurav5/ks/master/raid0_4disk_centos7_minimal_install.sh && chmod 777 raid0_4disk_centos7_minimal_install.sh && ./raid0_4disk_centos7_minimal_install.sh 
+# cd /tmp && wget https://raw.githubusercontent.com/munishgaurav5/ks/master/raid0_2disk_centos7_minimal_install.sh && chmod 777 raid0_2disk_centos7_minimal_install.sh && ./raid0_2disk_centos7_minimal_install.sh 
 
 
 # author: François Cami <fcami@fedoraproject.org>
@@ -16,7 +16,7 @@ yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-rele
 NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
 ###########
 
-export KSURL="https://github.com/munishgaurav5/ks/raw/master/raid0_4disk_centos7_minimal.cfg"
+export KSURL="https://github.com/munishgaurav5/ks/raw/master/raid0_2disk_centos7_minimal.cfg"
 export DNS1=8.8.8.8
 export DNS2=8.8.4.4
 
