@@ -1,5 +1,6 @@
-
-
+#
+# https://github.com/munishgaurav5/ks/raw/master/U/kick_install.sh
+#cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/U/kick_install.sh && chmod 777 kick_install.sh && ./kick_install.sh 
 
 
 # Update
