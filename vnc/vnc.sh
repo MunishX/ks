@@ -2,6 +2,8 @@
 
 # TIGER-VNC install and start
 
+# cd /tmp && yum install wget -y && wget https://github.com/munishgaurav5/ks/raw/master/vnc/vnc.sh && chmod 777 vnc.sh && ./vnc.sh 
+
 yum groupinstall "GNOME Desktop" -y
 
 unlink /etc/systemd/system/default.target
