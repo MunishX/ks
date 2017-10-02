@@ -2,6 +2,8 @@
 
 # VIRT-M
 
+# cd /tmp && yum install wget && wget https://github.com/munishgaurav5/ks/raw/master/ins/virt.sh && chmod 777 virt.sh && ./virt.sh
+
 egrep '(vmx|svm)' /proc/cpuinfo
 
 yum groupinstall "Virtualization Host" -y
