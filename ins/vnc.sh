@@ -6,6 +6,9 @@
 
 yum groupinstall "GNOME Desktop" -y
 
+# for centos 6
+# sudo yum groupinstall Desktop -y
+
 unlink /etc/systemd/system/default.target
 ln -sf /lib/systemd/system/graphical.target /etc/systemd/system/default.target
 
