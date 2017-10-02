@@ -7,6 +7,7 @@
 egrep '(vmx|svm)' /proc/cpuinfo
 
 yum groupinstall "Virtualization Host" -y
+yum install -y qemu-kvm qemu-img libvirt virt-install libvirt-python virt-manager virt-install libvirt-client virt-viewer 
 
 lsmod |grep kvm
 modprobe kvm
