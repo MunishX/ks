@@ -18,6 +18,8 @@ yum install sudo tigervnc-server xorg-x11-fonts-Type1 -y
 # gpasswd -a vnc sudo
 # su - vnc
 
+# vncserver -kill :1
+
 echo "start vnc server command : vncserver"
 echo "rebooting now!!!"
 
