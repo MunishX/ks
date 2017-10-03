@@ -56,11 +56,12 @@ Boot_device="eth0"
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${MASK}:$(hostname):$Boot_device:none nameserver=$DNS1 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz ip=${IPADDR}::${GW}:${MASK}:$(hostname):$Boot_device:none nameserver=$DNS1 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
 
+#net.ifnames=0 biosdevname=0 
 #inst.vncconnect=${IPADDR}:1
 
 #sed -i -e "s/GRUB_DEFAULT.*/GRUB_DEFAULT=\"reinstall\"/g" /etc/default/grub
