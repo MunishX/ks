@@ -24,7 +24,7 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.ircam.fr/pub/CentOS/7.2.1511/os/x86_64/"
 export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
 
-MAIN_IP="$(hostname -I)"
+MAIN_IP="$(hostname -I | awk '{print $1}' | head -1)"
 export IPADDR=${MAIN_IP//[[:blank:]]/}
 export MASK=255.255.255.0
 export GW=$(ip route|grep default | awk '{print $3}' | head -1)
