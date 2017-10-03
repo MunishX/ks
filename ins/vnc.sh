@@ -4,6 +4,7 @@
 
 # cd /tmp && yum install wget -y && wget https://github.com/munishgaurav5/ks/raw/master/ins/vnc.sh && chmod 777 vnc.sh && ./vnc.sh 
 
+yum groupinstall "Server with GUI" -y
 yum groupinstall "GNOME Desktop" -y
 
 # for centos 6
