@@ -40,10 +40,10 @@ curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 
 echo ""
 echo ""
-Root_DISK=$(lsblk | grep "/boot" | awk '{print $1}' | awk -F '├─' '{print $2}' | awk '{print $1}')
-Rid=$(blkid /dev/${Root_DISK} |  awk -F 'UUID="' '{print $2}' | awk -F '"' '{print $1}' | head -1)
-root_value='set root=UUID='${Rid}
-#root_value=`grep "set root=" /boot/grub2/grub.cfg | head -1`
+#Root_DISK=$(lsblk | grep "/boot" | awk '{print $1}' | awk -F '├─' '{print $2}' | awk '{print $1}')
+#Rid=$(blkid /dev/${Root_DISK} |  awk -F 'UUID="' '{print $2}' | awk -F '"' '{print $1}' | head -1)
+#root_value='set root=UUID='${Rid}
+root_value=`grep "set root=" /boot/grub2/grub.cfg | head -1`
 echo "$root_value"
 echo ""
 echo ""
