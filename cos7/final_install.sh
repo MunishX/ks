@@ -56,7 +56,7 @@ Boot_device="eth0"
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz ip=${IPADDR}::${GW}:${MASK}:$(hostname):$Boot_device:none nameserver=$DNS1 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz net.ifnames=0 biosdevname=0 inst.ks=$KSURL inst.vnc inst.vncpassword=changeme inst.repo=$MIRROR nameserver=$DNS1 ip=${IPADDR}::${GW}:${MASK}:$(hostname):$Boot_device:none inst.headless inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
