@@ -13,7 +13,7 @@
 
 ### NEW ###
 yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-release git sudo make cmake GeoIP sed at
-NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
+NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | head -1)"
 ###########
 
 export KSURL="https://github.com/munishgaurav5/ks/raw/master/cos7/xtest.cfg"
