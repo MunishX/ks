@@ -49,26 +49,26 @@ if [ $IP_CORRECT != "y" ]; then
 fi
 ####
 
-   while [[ $PREFIX_CORRECT = "" ]]; do # to be replaced with regex       
-       read -p "(2/4) SERVER IP PREFIX is '${PREFIX}' (y/n) : " PREFIX_CORRECT
-   done
+#   while [[ $PREFIX_CORRECT = "" ]]; do # to be replaced with regex       
+#       read -p "(2/4) SERVER IP PREFIX is '${PREFIX}' (y/n) : " PREFIX_CORRECT
+#   done
 
-if [ $PREFIX_CORRECT != "y" ]; then
-   read -p "SERVER IP PREFIX : " PREFIX
-   #exit 1
+#if [ $PREFIX_CORRECT != "y" ]; then
+#   read -p "SERVER IP PREFIX : " PREFIX
+#   #exit 1
    
-      PREFIX_CORRECT=
-      while [[ $PREFIX_CORRECT = "" ]]; do # to be replaced with regex       
-       read -p "SERVER IP PREFIX is '${PREFIX}' (y/n) : " PREFIX_CORRECT
-       #$MAIN_IP
-      done
-fi
+#      PREFIX_CORRECT=
+#      while [[ $PREFIX_CORRECT = "" ]]; do # to be replaced with regex       
+#       read -p "SERVER IP PREFIX is '${PREFIX}' (y/n) : " PREFIX_CORRECT
+#       #$MAIN_IP
+#      done
+#fi
 
-if [ $PREFIX_CORRECT != "y" ]; then
-   #read -p "SERVER IP : " MAIN_IP
-   echo "Error!... Try Again!"
-   exit 1
-fi
+#if [ $PREFIX_CORRECT != "y" ]; then
+#   #read -p "SERVER IP : " MAIN_IP
+#   echo "Error!... Try Again!"
+#   exit 1
+#fi
 ####
    while [[ $GW_CORRECT = "" ]]; do # to be replaced with regex       
        read -p "(3/4) SERVER IP Gayeway is '${GW}' (y/n) : " GW_CORRECT
