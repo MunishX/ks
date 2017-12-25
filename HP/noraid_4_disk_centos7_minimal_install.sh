@@ -50,7 +50,7 @@ fi
    done
 
 if [ $PREFIX_CORRECT != "y" ]; then
-   read -p "SERVER IP : " PREFIX
+   read -p "SERVER IP PREFIX : " PREFIX
    #exit 1
    
       PREFIX_CORRECT=
