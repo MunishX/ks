@@ -1,6 +1,6 @@
 #/bin/bash
 
-# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/install-dedibox.sh && chmod 777 install-dedibox.sh && ./install-dedibox.sh 
+# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/HP/install-dedibox.sh && chmod 777 install-dedibox.sh && ./install-dedibox.sh 
 
 ### NEW ###
 yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-release git sudo make cmake GeoIP sed at
@@ -15,7 +15,7 @@ NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
 
 #export INSTALL_SRV="http://KICKSTART_SRV_FQDN/"
 
-export KSURL="https://github.com/munishgaurav5/ks/raw/master/dedibox.cfg"
+export KSURL="https://github.com/munishgaurav5/ks/raw/master/HP/dedibox.cfg"
 export DNS1=8.8.8.8
 export DNS2=8.8.4.4
 
