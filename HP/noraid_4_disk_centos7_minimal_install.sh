@@ -17,11 +17,15 @@ MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/isos/x86_64/"
 
 
 
-IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1}')
-PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
-GW=$(ip route|grep default | awk '{print $3}')
-NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
+#IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1}')
+#PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
+#GW=$(ip route|grep default | awk '{print $3}')
+#NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
 
+IPADDR=$(hostname -I | awk -F ' ' '{print $1}' | head -1)
+GW=$(ip route|grep default | awk '{print $3}' | head -1)
+NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | head -1)"
+MASK=255.255.255.0
 ####
    while [[ $IP_CORRECT = "" ]]; do # to be replaced with regex       
        read -p "(1/4) SERVER MAIN IP is '${IPADDR}' (y/n) : " IP_CORRECT
@@ -134,7 +138,7 @@ Boot_device=${NETWORK_INTERFACE_NAME}
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${MASK}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
