@@ -33,7 +33,7 @@ if [ $IP_CORRECT != "y" ]; then
    
       IP_CORRECT=
       while [[ $IP_CORRECT = "" ]]; do # to be replaced with regex       
-       read -p "SERVER MAIN IP is ${IPADDR} (y/n) : " IP_CORRECT
+       read -p "SERVER MAIN IP is '${IPADDR}' (y/n) : " IP_CORRECT
        #$MAIN_IP
       done
 fi
