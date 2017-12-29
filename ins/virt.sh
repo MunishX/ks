@@ -22,7 +22,11 @@ systemctl enable libvirtd
 systemctl status libvirt-guests.service
 systemctl status libvirtd
 
+echo ""
+echo ""
 echo "Reboot manually Now !!"
+echo ""
+
 # IN GUI
 # virt-manager
 # virt-install --name=ArkitRHEL7 --ram=1024 --vcpus=1 --cdrom=/var/lib/libvirt/images/rhel-server-7.3-x86_64-dvd.iso --os-type=linux --os-variant=rhel7  --network bridge=br0 --graphics=spice  --disk path=/var/lib/libvirt/images/rhel7.dsk,size=20
