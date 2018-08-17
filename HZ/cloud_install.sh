@@ -48,7 +48,7 @@ echo ""
 
 #Boot_device=${NETWORK_INTERFACE_NAME}
 Boot_device="eth0"
-
+PREFIX=24
 
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
