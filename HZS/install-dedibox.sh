@@ -1,6 +1,6 @@
 #/bin/bash
 
-# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/OP/install-dedibox.sh && chmod 777 install-dedibox.sh && ./install-dedibox.sh 
+# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/HZS/install-dedibox.sh && chmod 777 install-dedibox.sh && ./install-dedibox.sh 
 
 ### NEW ###
 yum -y install nano wget curl net-tools epel-release sudo
