@@ -21,9 +21,18 @@ export DNS2=8.8.4.4
 
 export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
 
-export IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1}')
-export PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
-export GW=$(ip route|grep default | awk '{print $3}')
+export IPADDR=$(ip a | grep "scope global" | grep -Po '(?<=inet )[\d.]+' | tr '\n' ' ' | awk '{print $1}')
+#export IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1}')
+
+#export PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
+
+IParr=$(echo $IPADDR | tr "." " ")
+IParr1=$(echo $IParr  | awk '{print $1}')
+IParr2=$(echo $IParr  | awk '{print $2}')
+IParr3=$(echo $IParr  | awk '{print $3}')
+export GW=$IParr1.$IParr2.$IParr3.1
+
+#export GW=$(ip route|grep default | awk '{print $3}')
 
 curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
 curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
@@ -50,7 +59,7 @@ PREFIX=24
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$X_Host_Name:$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz net.ifnames=0 biosdevname=0 inst.gpt ip=${IPADDR}::${GW}:${PREFIX}:$X_Host_Name:$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
