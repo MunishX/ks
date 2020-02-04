@@ -88,8 +88,17 @@ echo ""
 ### One Time Boot Change
 grubby --default-index
 #grub-reboot 1
+
+# boot our new menu entry for the next reboot. 
+# We just need to use the menu entry title.
 grub2-reboot  "reinstall"
 grubby --default-index
+
+# verify the default menu entry.
+# you can use grub2-set-default 'MenuEntry' 
+# to change the default boot
+grub2-editenv list
+
 
 echo ""
 echo ""
