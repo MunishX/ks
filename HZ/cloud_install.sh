@@ -25,6 +25,9 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.imt-systems.com/centos/7/os/x86_64/"  
 export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
 
+# yum -y install bind-utils
+# ip route get $(dig +short google.com | tail -1)
+
 export IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1}')
 export PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
 export GW=$(ip route|grep default | awk '{print $3}' | head -1)
