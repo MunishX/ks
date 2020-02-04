@@ -15,7 +15,7 @@ NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}')"
 
 #export INSTALL_SRV="http://KICKSTART_SRV_FQDN/"
 
-export KSURL="https://github.com/munishgaurav5/ks/raw/master/HZ/cloud.cfg"
+export KSURL="https://raw.githubusercontent.com/munishgaurav5/ks/master/HZ/cloud.cfg"
 export DNS1=8.8.8.8
 export DNS2=8.8.4.4
 
