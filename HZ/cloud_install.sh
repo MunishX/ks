@@ -53,6 +53,10 @@ echo ""
 Boot_device="eth0"
 PREFIX=24
 
+###!/bin/sh
+##exec tail -n +3 $0
+
+
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
