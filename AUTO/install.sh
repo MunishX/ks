@@ -49,8 +49,8 @@ sleep 5
 echo ""
 
 
-#Boot_device=${NETWORK_INTERFACE_NAME}
-Boot_device="eth0"
+Boot_device=${NETWORK_INTERFACE_NAME}
+#Boot_device="eth0"
 #PREFIX=24
 
 ###!/bin/sh
