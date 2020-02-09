@@ -1,6 +1,6 @@
 #/bin/bash
 
-# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/HZ/cloud_install.sh && chmod 777 cloud_install.sh && ./cloud_install.sh 
+# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/AUTO/install.sh && chmod 777 install.sh && ./install.sh 
 
 ### NEW ###
 yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-release git sudo make cmake GeoIP sed at
