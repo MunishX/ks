@@ -28,8 +28,8 @@ export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
 # yum -y install bind-utils
 # ip route get $(dig +short google.com | tail -1)
 
-export IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1}')
-export PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}')
+export IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $1} | head -1')
+export PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2} | head -1')
 export GW=$(ip route|grep default | awk '{print $3}' | head -1)
 
 curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
@@ -51,13 +51,13 @@ echo ""
 
 #Boot_device=${NETWORK_INTERFACE_NAME}
 Boot_device="eth0"
-PREFIX=24
+#PREFIX=24
 
 ###!/bin/sh
 ##exec tail -n +3 $0
 
      boot_part=`df -h | grep -oP "/boot"`
-     if [ $boot_part -eq "/boot" ] ; then
+     if [ $boot_part = "/boot" ] ; then
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
