@@ -56,8 +56,8 @@ PREFIX=24
 ###!/bin/sh
 ##exec tail -n +3 $0
 
-     boot_part=`df -h | grep  "/boot"`
-     if [ $? -eq 0 ] ; then
+     boot_part=`df -h | grep -oP "/boot"`
+     if [ $boot_part -eq "/boot" ] ; then
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
