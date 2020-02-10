@@ -1,6 +1,6 @@
 #/bin/bash
 
-# cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/HZ/cloud_install.sh && chmod 777 cloud_install.sh && ./cloud_install.sh 
+# cd /tmp && yum install wget -y && wget https://github.com/munishgaurav5/ks/raw/master/HZ/cloud_install.sh && chmod 777 cloud_install.sh && ./cloud_install.sh 
 
 echo ""
 echo ""
