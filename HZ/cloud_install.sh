@@ -17,15 +17,18 @@ echo ""
 echo ""
 
 ### NEW ###
+os_type="NULL"
 
 if [ -n "$(command -v yum)" ]
 then
+os_type="yum"
 yum -y install nano wget curl net-tools lsof zip unzip sudo sed 
 fi
 
 if [ -n "$(command -v apt-get)" ]
 then
-apt-get -y install nano wget curl net-tools lsof zip unzip sudo sed 
+os_type="apt"
+sudo apt-get -y install nano wget curl net-tools lsof zip unzip sudo sed 
 fi
 
 NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | head -1)"
@@ -85,7 +88,7 @@ root_value=`grep "set root=" /boot/grub/grub.cfg | head -1`
 grub_out_file="/boot/grub/grub.cfg"
 fi
 
-if [ $root_value = "NULL" ]
+if [[ $root_value = "NULL" ]]
 then
 echo "Grub2 config file not found. Aborting Process"
 exit 0
@@ -111,7 +114,8 @@ Boot_device=${NETWORK_INTERFACE_NAME}
      #boot_part=`df -h | grep -oP "/boot"`
 
      boot_part=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $3}'`
-     if [ $boot_part = "/boot" ] ; then
+     if [[ $boot_part = "/boot" ]] 
+     then
      boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $1}'`
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
@@ -134,11 +138,6 @@ EOF
 #ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless 
 #sed -i -e "s/GRUB_DEFAULT.*/GRUB_DEFAULT=\"reinstall\"/g" /etc/default/grub
 
-grub2-mkconfig
-grub2-mkconfig --output=${grub_out_file}
-
-grubby --info=ALL
-
 echo ""
 echo ""
 echo "Setting Up default Grub Entry ..."
@@ -146,6 +145,32 @@ echo ""
 
 sleep 5
 echo ""
+
+
+if [[ $os_type = "yum" ]]
+then
+
+grub2-mkconfig
+grub2-mkconfig --output=${grub_out_file}
+grubby --info=ALL
+
+grubby --default-index
+grub2-reboot  "reinstall"
+grubby --default-index
+
+grub2-editenv list
+
+fi
+
+if [[ $os_type = "apt" ]]
+then
+
+sudo update-grub
+
+grub-reboot  "reinstall"
+
+grub-editenv list
+fi
 
 # install grub-customizer
 
@@ -163,12 +188,6 @@ echo ""
 #grub-reboot 1
 # boot our new menu entry for the next reboot. 
 # We just need to use the menu entry title.
-
-grubby --default-index
-grub2-reboot  "reinstall"
-grubby --default-index
-
-grub2-editenv list
 
 # verify the default menu entry.
 # you can use grub2-set-default 'MenuEntry' 
