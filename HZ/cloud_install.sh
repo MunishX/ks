@@ -51,7 +51,8 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.nl.leaseweb.net/centos/7/os/x86_64/"
 #export MIRROR="http://mirror.inode.at/centos/7.3.1611/os/x86_64/"
 #export MIRROR="http://mirror.imt-systems.com/centos/7/os/x86_64/"  
-export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
+#export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
+export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
 
 # yum -y install bind-utils
 # ip route get $(dig +short google.com | tail -1)
