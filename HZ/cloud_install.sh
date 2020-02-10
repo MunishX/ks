@@ -2,8 +2,32 @@
 
 # cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/HZ/cloud_install.sh && chmod 777 cloud_install.sh && ./cloud_install.sh 
 
+echo ""
+echo ""
+
+if [ -e /etc/grub.d/40_custom ]
+then
+echo "Starting New CentOS 7 Installation Process"
+else
+echo "Grub2 not available. Aborting Process"
+exit 0
+fi
+
+echo ""
+echo ""
+
 ### NEW ###
-yum -y install nano wget curl net-tools lsof zip unzip epel-release sudo sed 
+
+if [ -n "$(command -v yum)" ]
+then
+yum -y install nano wget curl net-tools lsof zip unzip sudo sed 
+fi
+
+if [ -n "$(command -v apt-get)" ]
+then
+apt-get -y install nano wget curl net-tools lsof zip unzip sudo sed 
+fi
+
 NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | head -1)"
 #NETWORK_INTERFACE_NAME="em22"
 ###########
@@ -46,12 +70,35 @@ curl -o /boot/${KSFName} ${KSURL}
 
 echo ""
 echo ""
-root_value=`grep "set root=" /boot/grub2/grub.cfg | head -1`
+
+root_value="NULL"
+
+if [ -e /boot/grub2/grub.cfg ]
+then
+root_value=`grep "set root=" /boot/grub2/grub.cfg | head -1` 
+grub_out_file="/boot/grub2/grub.cfg"
+fi
+
+if [ -e /boot/grub/grub.cfg ]
+then
+root_value=`grep "set root=" /boot/grub/grub.cfg | head -1` 
+grub_out_file="/boot/grub/grub.cfg"
+fi
+
+if [ $root_value = "NULL" ]
+then
+echo "Grub2 config file not found. Aborting Process"
+exit 0
+fi
+
+echo ""
 echo "$root_value"
 echo ""
 echo ""
 sleep 5
 echo ""
+
+
 
 
 Boot_device=${NETWORK_INTERFACE_NAME}
@@ -88,7 +135,7 @@ EOF
 #sed -i -e "s/GRUB_DEFAULT.*/GRUB_DEFAULT=\"reinstall\"/g" /etc/default/grub
 
 grub2-mkconfig
-grub2-mkconfig --output=/boot/grub2/grub.cfg
+grub2-mkconfig --output=${grub_out_file}
 
 grubby --info=ALL
 
