@@ -3,7 +3,7 @@
 # cd /tmp && wget https://github.com/munishgaurav5/ks/raw/master/HZ/cloud_install.sh && chmod 777 cloud_install.sh && ./cloud_install.sh 
 
 ### NEW ###
-yum -y install nano wget curl net-tools lsof bzip2 zip unzip rar unrar epel-release git sudo make cmake GeoIP sed at
+yum -y install nano wget curl net-tools lsof zip unzip epel-release sudo sed 
 NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | head -1)"
 #NETWORK_INTERFACE_NAME="em22"
 ###########
@@ -16,6 +16,7 @@ NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | he
 #export INSTALL_SRV="http://KICKSTART_SRV_FQDN/"
 
 export KSURL="https://raw.githubusercontent.com/munishgaurav5/ks/master/HZ/cloud.cfg"
+export KSFName="ks.cfg"
 export DNS1=8.8.8.8
 export DNS2=8.8.4.4
 
@@ -32,8 +33,12 @@ export IPADDR=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| a
 export PREFIX=$(ip a s $NETWORK_INTERFACE_NAME |grep "inet "|awk '{print $2}'| awk -F '/' '{print $2}' | head -1)
 export GW=$(ip route|grep default | awk '{print $3}' | head -1)
 
+rm -rf /boot/{vmlinuz,initrd.img}
+rm -rf /boot/${KSFName}
+
 curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
 curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
+curl -o /boot/${KSFName} ${KSURL}
 
 #    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL
 # inst.vncconnect=${IPADDR}:5500 # inst.vnc inst.vncpassword=changeme headless
@@ -56,26 +61,30 @@ Boot_device=${NETWORK_INTERFACE_NAME}
 ###!/bin/sh
 ##exec tail -n +3 $0
 
-     boot_part=`df -h | grep -oP "/boot"`
+     #boot_part=`df -h | grep -oP "/boot"`
+
+     boot_part=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $3}'`
      if [ $boot_part = "/boot" ] ; then
+     boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $1}'`
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz  net.ifnames=0 biosdevname=0  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
      else
+     boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /boot/vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless inst.lang=en_US inst.keymap=us 
+    linux /boot/vmlinuz  net.ifnames=0 biosdevname=0  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us 
     initrd /boot/initrd.img
 }
 EOF
      fi
 
-#net.ifnames=0 biosdevname=0 
+#ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless 
 #sed -i -e "s/GRUB_DEFAULT.*/GRUB_DEFAULT=\"reinstall\"/g" /etc/default/grub
 
 grub2-mkconfig
