@@ -121,7 +121,7 @@ Boot_device=${NETWORK_INTERFACE_NAME}
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz  ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2   inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
@@ -130,7 +130,7 @@ EOF
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /boot/vmlinuz  ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2   inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us 
+    linux /boot/vmlinuz   inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us 
     initrd /boot/initrd.img
 }
 EOF
