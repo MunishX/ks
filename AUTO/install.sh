@@ -42,7 +42,7 @@ NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | he
 
 #export INSTALL_SRV="http://KICKSTART_SRV_FQDN/"
 
-export KSURL="https://github.com/munishgaurav5/ks/raw/master/AUTO/ks.cfg"
+export KSURL="https://raw.githubusercontent.com/munishgaurav5/ks/master/AUTO/ks.cfg"
 export KSFName="ks.cfg"
 export DNS1=8.8.8.8
 export DNS2=8.8.4.4
@@ -121,7 +121,7 @@ Boot_device=${NETWORK_INTERFACE_NAME}
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz ksdevice=link nameserver=$DNS1 nameserver=$DNS2  inst.vnc inst.vncpassword=changeme  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz  inst.vnc inst.vncpassword=changeme  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
@@ -130,7 +130,7 @@ EOF
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /boot/vmlinuz  ksdevice=link nameserver=$DNS1 nameserver=$DNS2  inst.vnc inst.vncpassword=changeme  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us 
+    linux /boot/vmlinuz  inst.vnc inst.vncpassword=changeme  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us 
     initrd /boot/initrd.img
 }
 EOF
