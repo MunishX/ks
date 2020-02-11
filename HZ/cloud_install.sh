@@ -154,6 +154,7 @@ then
 grub2-mkconfig
 grub2-mkconfig --output=${grub_out_file}
 grubby --info=ALL
+#grub2-mkconfig --output=/boot/grub2/grub.cfg
 
 grubby --default-index
 grub2-reboot  "reinstall"
