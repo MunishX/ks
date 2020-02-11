@@ -121,7 +121,7 @@ Boot_device=${NETWORK_INTERFACE_NAME}
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz   inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.headless  inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz  ip=dhcp nameserver=$DNS1 nameserver=$DNS2  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
     initrd /initrd.img
 }
 EOF
@@ -130,11 +130,15 @@ EOF
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /boot/vmlinuz  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.headless  inst.lang=en_US inst.keymap=us 
+    linux /boot/vmlinuz ip=dhcp nameserver=$DNS1 nameserver=$DNS2  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
     initrd /boot/initrd.img
 }
 EOF
      fi
+
+#    linux /vmlinuz ip=dhcp nameserver=$DNS1 nameserver=$DNS2  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
+#    linux /vmlinuz   inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.headless  inst.lang=en_US inst.keymap=us 
+
 
 #net.ifnames=0 biosdevname=0 
 #ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless 
