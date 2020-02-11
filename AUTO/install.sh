@@ -51,8 +51,8 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.nl.leaseweb.net/centos/7/os/x86_64/"
 #export MIRROR="http://mirror.inode.at/centos/7.3.1611/os/x86_64/"
 #export MIRROR="http://mirror.imt-systems.com/centos/7/os/x86_64/"  
-#export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
-export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
+export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
+#export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
 
 # yum -y install bind-utils
 # ip route get $(dig +short google.com | tail -1)
@@ -121,7 +121,7 @@ Boot_device=${NETWORK_INTERFACE_NAME}
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz  inst.vnc inst.vncpassword=changeme  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us 
+    linux /vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme    inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.headless  inst.lang=en_US inst.keymap=us 
     initrd /initrd.img
 }
 EOF
@@ -130,7 +130,7 @@ EOF
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
-    linux /boot/vmlinuz  inst.vnc inst.vncpassword=changeme  inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us 
+    linux /boot/vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme      inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.headless  inst.lang=en_US inst.keymap=us 
     initrd /boot/initrd.img
 }
 EOF
