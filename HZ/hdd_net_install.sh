@@ -138,10 +138,10 @@ cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     insmod part_msdos
     $root_value
-    set isofile=/${ISOName}
+    set isofile=/\${ISOName}
     loopback loop $isofile
     probe --set isouuid --fs-uuid (loop)
-    linux (loop)/isolinux/vmlinuz root=live:UUID=${isouuid} iso-scan/filename=${isofile} inst.repo=file:///images/install/squashfs.img quiet inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
+    linux (loop)/isolinux/vmlinuz root=live:UUID=\${isouuid} iso-scan/filename=\${isofile} inst.repo=file:///images/install/squashfs.img quiet inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
     initrd (loop)/isolinux/initrd.img
 }
 EOF
@@ -152,9 +152,9 @@ menuentry "reinstall" {
     insmod part_msdos
     $root_value
     set isofile=/boot/${ISOName}
-    loopback loop $isofile
+    loopback loop \$isofile
     probe --set isouuid --fs-uuid (loop)
-    linux (loop)/isolinux/vmlinuz root=live:UUID=${isouuid} iso-scan/filename=${isofile} inst.repo=file:///images/install/squashfs.img quiet inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
+    linux (loop)/isolinux/vmlinuz root=live:UUID=\${isouuid} iso-scan/filename=\${isofile} inst.repo=file:///images/install/squashfs.img quiet inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
     initrd (loop)/isolinux/initrd.img
 }
 EOF
