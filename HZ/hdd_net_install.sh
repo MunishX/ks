@@ -44,6 +44,7 @@ NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | he
 
 export KSURL="https://raw.githubusercontent.com/munishgaurav5/ks/master/HZ/cloud.cfg"
 export KSFName="ks.cfg"
+export ISOName="cos.iso"
 export DNS1=8.8.8.8
 export DNS2=8.8.4.4
 
@@ -52,7 +53,9 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.inode.at/centos/7.3.1611/os/x86_64/"
 #export MIRROR="http://mirror.imt-systems.com/centos/7/os/x86_64/"  
 #export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
-export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
+#export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
+
+export MIN_ISO="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/isos/x86_64/CentOS-7-x86_64-Minimal-1810.iso"
 
 # yum -y install bind-utils
 # ip route get $(dig +short google.com | tail -1)
@@ -63,10 +66,13 @@ export GW=$(ip route|grep default | awk '{print $3}' | head -1)
 
 rm -rf /boot/{vmlinuz,initrd.img}
 rm -rf /boot/${KSFName}
+rm -rf /boot/${ISOName}
 
-curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
-curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
+#curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
+#curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 curl -o /boot/${KSFName} ${KSURL}
+curl -o /boot/${ISOName} ${MIN_ISO}
+
 
 #    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL
 # inst.vncconnect=${IPADDR}:5500 # inst.vnc inst.vncpassword=changeme headless
@@ -130,18 +136,26 @@ Boot_device=${NETWORK_INTERFACE_NAME}
      boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $1}'`
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
+    insmod part_msdos
     $root_value
-    linux /vmlinuz inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
-    initrd /initrd.img
+    set isofile=/${ISOName}
+    loopback loop $isofile
+    probe --set isouuid --fs-uuid (loop)
+    linux (loop)/isolinux/vmlinuz root=live:UUID=${isouuid} iso-scan/filename=${isofile} inst.repo=file:///images/install/squashfs.img quiet inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
+    initrd (loop)/isolinux/initrd.img
 }
 EOF
      else
      boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
+    insmod part_msdos
     $root_value
-    linux /boot/vmlinuz inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
-    initrd /boot/initrd.img
+    set isofile=/boot/${ISOName}
+    loopback loop $isofile
+    probe --set isouuid --fs-uuid (loop)
+    linux (loop)/isolinux/vmlinuz root=live:UUID=${isouuid} iso-scan/filename=${isofile} inst.repo=file:///images/install/squashfs.img quiet inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
+    initrd (loop)/isolinux/initrd.img
 }
 EOF
      fi
