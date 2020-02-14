@@ -141,7 +141,7 @@ menuentry "reinstall" {
     set isofile=/\${ISOName}
     loopback loop $isofile
     probe --set isouuid --fs-uuid (loop)
-    linux (loop)/isolinux/vmlinuz root=live:UUID=\${isouuid} iso-scan/filename=\${isofile} inst.repo=file:///images/install/squashfs.img quiet inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
+    linux (loop)/isolinux/vmlinuz root=live:UUID=\${isouuid} iso-scan/filename=\${isofile} inst.repo=file:///run/initramfs/live quiet inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
     initrd (loop)/isolinux/initrd.img
 }
 EOF
@@ -154,12 +154,13 @@ menuentry "reinstall" {
     set isofile=/boot/${ISOName}
     loopback loop \$isofile
     probe --set isouuid --fs-uuid (loop)
-    linux (loop)/isolinux/vmlinuz root=live:UUID=\${isouuid} iso-scan/filename=\${isofile} inst.repo=file:///images/install/squashfs.img quiet inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
+    linux (loop)/isolinux/vmlinuz root=live:UUID=\${isouuid} iso-scan/filename=\${isofile} inst.repo=file:///run/initramfs/live quiet inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
     initrd (loop)/isolinux/initrd.img
 }
 EOF
      fi
 
+#file:///images/install/squashfs.img
 #ip=dhcp nameserver=$DNS1 nameserver=$DNS2  
 #ip=${IPADDR}
 #ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless 
