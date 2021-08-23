@@ -1,6 +1,7 @@
 #!/bin/bash
 
 proxy_list_path="/usr/lib/proxy/"
+systemd_list_path="/usr/lib/systemd/"
 
 rdpproxy_info() {
     echo ""
@@ -56,8 +57,10 @@ else
        read -p "Enter Port number to remove: " local_port
    done
    
-FILE=${proxy_list_path}rdpproxy_${local_port}_*
-listcount=$(ls -1q $FILE 2> /dev/null | wc -l)
+PNAME=rdpproxy_${local_port}   
+FNAME=${proxy_list_path}${PNAME}_*
+SNAME=${systemd_list_path}system/${PNAME}*
+listcount=$(ls -1q $FNAME 2> /dev/null | wc -l)
 #if test -f "$FILE"; then
 #    echo "$FILE exists."
 #fi
@@ -68,6 +71,10 @@ listcount=$(ls -1q $FILE 2> /dev/null | wc -l)
 #fi
 if [[ $listcount -eq 1 ]]; then
   echo "found 1";
+  systemctl stop ${PNAME} 
+  systemctl disable ${PNAME}
+  rm -rf ${SNAME}
+  rm -rf ${FNAME}
   exit;
 fi
 echo "count: $listcount"
