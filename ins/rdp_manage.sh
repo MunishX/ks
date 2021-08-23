@@ -12,15 +12,19 @@ rdpproxy_info() {
     echo ""
 }
 
-#action=$1 echo ""
-#    while [[ $action = "" ]]; do # to be replaced with regex
-#       read -p "(1/6) Enter Username (user): " User_Name done
-if [ -z "$1" ]; then
+rdpproxy_usages() {
     echo "Usages:"
     echo "For Info Only    : rdpproxy"
     echo "For Adding   RDP : rdpproxy add"
     echo "For Removing RDP : rdpproxy remove"
     echo ""
+}
+
+#action=$1 echo ""
+#    while [[ $action = "" ]]; do # to be replaced with regex
+#       read -p "(1/6) Enter Username (user): " User_Name done
+if [ -z "$1" ]; then
+    rdpproxy_usages
     rdpproxy_info
 else
     action=$1
@@ -34,7 +38,9 @@ else
        read -p "Local Port: " local_port
    done
  # stop, disable, remove intl, remove list file.
-
+ # show list
+ rdpproxy_info
+ exit 
  fi
  
  if [ $action = "add" ]; then
@@ -62,10 +68,16 @@ else
   ## show status done.
   ## show list
   rdpproxy_info
+  exit
  fi
+ 
+rdpproxy_usages
+rdpproxy_info
+exit
 
 fi
 
+####################
 echo ""
 dname="Ricardo"
 #read -p "Enter your name [${dname}]: " name
