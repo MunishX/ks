@@ -1,6 +1,7 @@
 #!/bin/bash
 
 rdpproxy_info() {
+    echo ""
     mkdir -p /usr/lib/proxy/
     echo "-----------------------------------"
     echo "-------------- INFO ---------------"
@@ -13,10 +14,25 @@ rdpproxy_info() {
 }
 
 rdpproxy_usages() {
+    echo ""
     echo "Usages:"
     echo "For Info Only    : rdpproxy"
     echo "For Adding   RDP : rdpproxy add"
     echo "For Removing RDP : rdpproxy remove"
+    echo ""
+}
+
+rdpproxy_remove() {
+    echo ""
+    echo "-----------------------------------"
+    echo "-------- Remove RDP Proxy ---------"
+    echo ""
+}
+
+rdpproxy_add() {
+    echo ""
+    echo "-----------------------------------"
+    echo "---------- Add RDP Proxy ----------"
     echo ""
 }
 
@@ -28,14 +44,14 @@ if [ -z "$1" ]; then
     rdpproxy_info
 else
     action=$1
-    echo "action :" $1
+    echo "action :" $1 #########
     
  if [ $action = "remove" ]; then
-   
    local_port=$2
    while [[ $local_port = "" ]]; do # to be replaced with regex
        rdpproxy_info
-       read -p "Local Port: " local_port
+       rdpproxy_remove
+       read -p "Enter Port number to remove: " local_port
    done
  # stop, disable, remove intl, remove list file.
  # show list
@@ -48,7 +64,8 @@ else
    local_port=$2
    while [[ $local_port = "" ]]; do # to be replaced with regex
        rdpproxy_info
-       read -p "Local Port : " local_port
+       rdpproxy_add
+       read -p "Unused Local Port for proxy : " local_port
     done
   
    rdp_ip=$3
@@ -81,7 +98,7 @@ fi
 echo ""
 dname="Ricardo"
 #read -p "Enter your name [${dname}]: " name
-read -e -i "$dname" -p "Enter your name: " name
+#read -e -i "$dname" -p "Enter your name: " name
 
 if [ -z "${name}" ]; then
     name=${dname}
