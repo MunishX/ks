@@ -57,11 +57,22 @@ else
    done
    
 FILE=${proxy_list_path}rdpproxy_${local_port}_*
-listcount=$(ls -1q $FILE | wc -l)
+listcount=$(ls -1q $FILE 2> /dev/null | wc -l)
 #if test -f "$FILE"; then
 #    echo "$FILE exists."
 #fi
+#if [[ $numprocesses -gt 15 ]] ; then
+#  echo "Done."
+#else
+#  echo "Not Complete."
+#fi
+if [[ $listcount -eq 1 ]]; then
+  echo "found 1";
+  exit;
+fi
 echo "count: $listcount"
+
+
 
  # stop, disable, remove intl, remove list file.
  # show list
