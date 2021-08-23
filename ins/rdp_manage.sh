@@ -65,7 +65,7 @@ else
    while [[ $local_port = "" ]]; do # to be replaced with regex
        rdpproxy_info
        rdpproxy_add
-       read -p "Unused Local Port for proxy : " local_port
+       read -p "Enter unused Port for RDP proxy : " local_port
     done
   
    rdp_ip=$3
