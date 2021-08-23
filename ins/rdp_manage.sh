@@ -7,7 +7,8 @@ rdpproxy_info() {
     echo ""
     mkdir -p ${proxy_list_path}
     echo "-----------------------------------"
-    echo "-------------- INFO ---------------"
+    echo "------------- INFO ----------------"
+    echo "---- Current RDP Port Forwards ----"
     echo ""
     echo "PORT -> RDP_IP:RDP_Port"
     echo "-----------------------"
@@ -70,15 +71,18 @@ listcount=$(ls -1q $FNAME 2> /dev/null | wc -l)
 #  echo "Not Complete."
 #fi
 if [[ $listcount -eq 1 ]]; then
-  echo "found 1";
-  systemctl stop ${PNAME} 
-  systemctl disable ${PNAME}
+  #echo "found 1";
+  systemctl stop ${PNAME} > /dev/null  2>&1
+  systemctl disable ${PNAME} > /dev/null  2>&1
   rm -rf ${SNAME} > /dev/null  2>&1
   rm -rf ${FNAME} > /dev/null  2>&1
+  sleep 1
     if test -f "$SNAME"; then
-        echo "Service file still exists."
+        #echo "Service file still exists."
+        echo ""
     else
-        echo "Service file removed successfully."
+        #echo "Service file removed successfully."
+        echo ""
     fi
   echo "------------------------------"
   echo "---------- Status ------------"
@@ -86,6 +90,7 @@ if [[ $listcount -eq 1 ]]; then
   echo "Status: SUCCESS! RDP proxy with port ${local_port} removed successfully."
   echo ""
   echo "------------------------------"
+  rdpproxy_info
   exit;
 else
   echo "------------------------------"
@@ -148,11 +153,12 @@ listcount=$(ls -1q $FNAME 2> /dev/null | wc -l)
 #  echo "Not Complete."
 #fi
 if [[ $listcount -eq 0 ]]; then
-  echo "found 0";
-  systemctl stop ${PNAME} 
-  systemctl disable ${PNAME}
+  #echo "found 0";
+  systemctl stop ${PNAME}  > /dev/null  2>&1
+  systemctl disable ${PNAME} > /dev/null  2>&1
   rm -rf ${SNAME} > /dev/null  2>&1
   rm -rf ${FNAME} > /dev/null  2>&1
+  sleep 1
   cp /usr/lib/systemd/system/rdptunnel.sample ${SNAME}
   sed -i "s%rdplport%$local_port%" ${SNAME}
   sed -i "s%rdprport%$rdp_port%" ${SNAME}
@@ -160,7 +166,8 @@ if [[ $listcount -eq 0 ]]; then
   touch ${LNAME}
   
     if test -f "$SNAME"; then
-        echo "Service file copied successfully."
+        #echo "Service file copied successfully."
+        echo ""
         systemctl daemon-reload
         sleep 1
         systemctl enable ${PNAME} 
@@ -168,21 +175,24 @@ if [[ $listcount -eq 0 ]]; then
         systemctl status ${PNAME} 
 
         if test -f "$LNAME"; then
-           echo "List file added successfully."
+           #echo "List file added successfully."
   echo "------------------------------"
   echo "---------- Status ------------"
   echo ""
   echo "Status: SUCCESS! RDP proxy with port ${local_port} added successfully."
   echo ""
   echo "------------------------------"
+  rdpproxy_info
   exit;
     else
-            echo "List file not exist."
-            ls -alh ${LNAME}
+            #echo "List file not exist."
+            echo "Error Occured!"
+            #ls -alh ${LNAME}
         fi
 
     else
-        echo "Service file not exist."
+        #echo "Service file not exist."
+        echo "Error Occured!"
     fi
 
   echo "------------------------------"
