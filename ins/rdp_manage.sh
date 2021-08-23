@@ -59,7 +59,7 @@ else
    
 PNAME=rdpproxy_${local_port}   
 FNAME=${proxy_list_path}${PNAME}_*
-SNAME=${systemd_list_path}system/${PNAME}*
+SNAME=${systemd_list_path}system/${PNAME}.service
 listcount=$(ls -1q $FNAME 2> /dev/null | wc -l)
 #if test -f "$FILE"; then
 #    echo "$FILE exists."
@@ -73,17 +73,36 @@ if [[ $listcount -eq 1 ]]; then
   echo "found 1";
   systemctl stop ${PNAME} 
   systemctl disable ${PNAME}
-  rm -rf ${SNAME}
-  rm -rf ${FNAME}
+  rm -rf ${SNAME} > /dev/null  2>&1
+  rm -rf ${FNAME} > /dev/null  2>&1
+    if test -f "$SNAME"; then
+        echo "Service file still exists."
+    else
+        echo "Service file removed successfully."
+    fi
+  echo "------------------------------"
+  echo "---------- Status ------------"
+  echo ""
+  echo "Status: SUCCESS! RDP proxy with port ${local_port} removed successfully."
+  echo ""
+  echo "------------------------------"
+  exit;
+else
+  echo "------------------------------"
+  echo "---------- Status ------------"
+  echo ""
+  echo "Status: ERROR! RDP proxy with port ${local_port} does not exist."
+  echo ""
+  echo "------------------------------"
   exit;
 fi
-echo "count: $listcount"
+#echo "count: $listcount"
 
 
 
  # stop, disable, remove intl, remove list file.
- # show list
- rdpproxy_info
+ # show status
+ #rdpproxy_info
  exit 
  fi
  
@@ -112,7 +131,79 @@ echo "count: $listcount"
   ## copy intl , replace data , make list file, reload intl, start enable,
   ## show status done.
   ## show list
-  rdpproxy_info
+  #rdpproxy_info
+  
+PNAME=rdpproxy_${local_port}   
+FNAME=${proxy_list_path}${PNAME}_*
+SNAME=${systemd_list_path}system/${PNAME}.service
+LNAME=${proxy_list_path}${PNAME}_${rdp_ip}_${rdp_port}
+
+listcount=$(ls -1q $FNAME 2> /dev/null | wc -l)
+#if test -f "$FILE"; then
+#    echo "$FILE exists."
+#fi
+#if [[ $numprocesses -gt 15 ]] ; then
+#  echo "Done."
+#else
+#  echo "Not Complete."
+#fi
+if [[ $listcount -eq 0 ]]; then
+  echo "found 0";
+  systemctl stop ${PNAME} 
+  systemctl disable ${PNAME}
+  rm -rf ${SNAME} > /dev/null  2>&1
+  rm -rf ${FNAME} > /dev/null  2>&1
+  cp /usr/lib/systemd/system/rdptunnel.sample ${SNAME}
+  sed -i "s%rdplport%$local_port%" ${SNAME}
+  sed -i "s%rdprport%$rdp_port%" ${SNAME}
+  sed -i "s%rdprhost%$rdp_ip%" ${SNAME}
+  touch ${LNAME}
+  
+    if test -f "$SNAME"; then
+        echo "Service file copied successfully."
+        systemctl daemon-reload
+        sleep 1
+        systemctl enable ${PNAME} 
+        systemctl start ${PNAME} 
+        systemctl status ${PNAME} 
+
+        if test -f "$LNAME"; then
+           echo "List file added successfully."
+  echo "------------------------------"
+  echo "---------- Status ------------"
+  echo ""
+  echo "Status: SUCCESS! RDP proxy with port ${local_port} added successfully."
+  echo ""
+  echo "------------------------------"
+  exit;
+    else
+            echo "List file not exist."
+            ls -alh ${LNAME}
+        fi
+
+    else
+        echo "Service file not exist."
+    fi
+
+  echo "------------------------------"
+  echo "---------- Status ------------"
+  echo ""
+  echo "Status: ERROR! RDP proxy forwarding setup caused error.."
+  echo ""
+  echo "------------------------------"
+  exit;
+
+else
+  echo "------------------------------"
+  echo "---------- Status ------------"
+  echo ""
+  echo "Status: ERROR! RDP proxy with port ${local_port} forwarding already exist. Choose unused port.."
+  echo ""
+  echo "------------------------------"
+  exit;
+fi
+
+
   exit
  fi
  
@@ -123,19 +214,19 @@ exit
 fi
 
 ####################
-echo ""
-dname="Ricardo"
+#echo ""
+#dname="Ricardo"
 #read -p "Enter your name [${dname}]: " name
 #read -e -i "$dname" -p "Enter your name: " name
 
-if [ -z "${name}" ]; then
-    name=${dname}
-else
-    echo ""
-fi
+#if [ -z "${name}" ]; then
+#    name=${dname}
+#else
+#    echo ""
+#fi
 
-echo ""
-echo $name
-echo ""
+#echo ""
+#echo $name
+#echo ""
 
 
