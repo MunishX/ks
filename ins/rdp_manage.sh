@@ -55,6 +55,14 @@ else
        rdpproxy_remove
        read -p "Enter Port number to remove: " local_port
    done
+   
+FILE=${proxy_list_path}rdpproxy_${local_port}_*
+listcount=$(ls -1q $FILE | wc -l)
+#if test -f "$FILE"; then
+#    echo "$FILE exists."
+#fi
+echo "count: $listcount"
+
  # stop, disable, remove intl, remove list file.
  # show list
  rdpproxy_info
