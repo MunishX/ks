@@ -12,7 +12,7 @@ rdpproxy_info() {
     echo ""
     echo "PORT -> RDP_IP:RDP_Port"
     echo "-----------------------"
-    ls ${proxy_list_path}rdpproxy* | awk '{split($0,a,"_"); print a[2],"->",a[3]":"a[4]}'
+    ls ${proxy_list_path}rdpproxy*  2> /dev/null | awk '{split($0,a,"_"); print a[2],"->",a[3]":"a[4]}'
     echo "-----------------------"
     echo ""
 }
