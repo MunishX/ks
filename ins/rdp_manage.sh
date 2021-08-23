@@ -1,14 +1,16 @@
 #!/bin/bash
 
+proxy_list_path="/usr/lib/proxy/"
+
 rdpproxy_info() {
     echo ""
-    mkdir -p /usr/lib/proxy/
+    mkdir -p ${proxy_list_path}
     echo "-----------------------------------"
     echo "-------------- INFO ---------------"
     echo ""
     echo "PORT -> RDP_IP:RDP_Port"
     echo "-----------------------"
-    ls /usr/lib/proxy/rdpproxy* | awk '{split($0,a,"_"); print a[2],"->",a[3]":"a[4]}'
+    ls ${proxy_list_path}rdpproxy* | awk '{split($0,a,"_"); print a[2],"->",a[3]":"a[4]}'
     echo "-----------------------"
     echo ""
 }
