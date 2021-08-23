@@ -84,12 +84,13 @@ if [[ $listcount -eq 1 ]]; then
         #echo "Service file removed successfully."
         echo ""
     fi
-  echo "------------------------------"
+  echo ""
+  echo '##############################'
   echo "---------- Status ------------"
   echo ""
   echo "Status: SUCCESS! RDP proxy with port ${local_port} removed successfully."
   echo ""
-  echo "------------------------------"
+  echo '##############################'
   rdpproxy_info
   exit;
 else
@@ -170,18 +171,20 @@ if [[ $listcount -eq 0 ]]; then
         echo ""
         systemctl daemon-reload
         sleep 1
-        systemctl enable ${PNAME} 
-        systemctl start ${PNAME} 
-        systemctl status ${PNAME} 
+        systemctl enable ${PNAME}  > /dev/null  2>&1
+        systemctl start ${PNAME}  > /dev/null  2>&1
+        #systemctl status ${PNAME}  > /dev/null  2>&1
 
         if test -f "$LNAME"; then
            #echo "List file added successfully."
-  echo "------------------------------"
+  echo ""
+  echo '##############################'
   echo "---------- Status ------------"
   echo ""
   echo "Status: SUCCESS! RDP proxy with port ${local_port} added successfully."
   echo ""
-  echo "------------------------------"
+  echo '##############################'
+  echo ""
   rdpproxy_info
   exit;
     else
