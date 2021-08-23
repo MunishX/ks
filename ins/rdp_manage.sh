@@ -1,11 +1,15 @@
 #!/bin/bash
 
 rdpproxy_info() {
+    mkdir -p /usr/lib/proxy/
     echo "-----------------------------------"
     echo "-------------- INFO ---------------"
     echo ""
     echo "PORT -> RDP_IP:RDP_Port"
+    echo "-----------------------"
     ls /usr/lib/proxy/rdpproxy* | awk '{split($0,a,"_"); print a[2],"->",a[3]":"a[4]}'
+    echo "-----------------------"
+    echo ""
 }
 
 #action=$1 echo ""
@@ -21,6 +25,45 @@ if [ -z "$1" ]; then
 else
     action=$1
     echo "action :" $1
+    
+ if [ $action = "remove" ]; then
+   
+   local_port=$2
+   while [[ $local_port = "" ]]; do # to be replaced with regex
+       rdpproxy_info
+       read -p "Local Port: " local_port
+   done
+ # stop, disable, remove intl, remove list file.
+
+ fi
+ 
+ if [ $action = "add" ]; then
+   
+   local_port=$2
+   while [[ $local_port = "" ]]; do # to be replaced with regex
+       rdpproxy_info
+       read -p "Local Port : " local_port
+    done
+  
+   rdp_ip=$3
+   echo ""
+   while [[ $rdp_ip = "" ]]; do # to be replaced with regex
+       read -p "RDP IP : " rdp_ip
+    done
+
+   rdp_port=$4
+   drdp_port="3389"
+   echo ""
+   while [[ $rdp_port = "" ]]; do # to be replaced with regex
+       read -e -i "$drdp_port" -p  "RDP Port : " rdp_port
+    done
+
+  ## copy intl , replace data , make list file, reload intl, start enable,
+  ## show status done.
+  ## show list
+  rdpproxy_info
+ fi
+
 fi
 
 echo ""
