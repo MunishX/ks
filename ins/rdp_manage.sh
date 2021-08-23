@@ -84,6 +84,7 @@ if [[ $listcount -eq 1 ]]; then
         #echo "Service file removed successfully."
         echo ""
     fi
+  clear
   echo ""
   echo '##############################'
   echo "---------- Status ------------"
@@ -177,11 +178,13 @@ if [[ $listcount -eq 0 ]]; then
 
         if test -f "$LNAME"; then
            #echo "List file added successfully."
+  clear
   echo ""
   echo '##############################'
   echo "---------- Status ------------"
   echo ""
   echo "Status: SUCCESS! RDP proxy with port ${local_port} added successfully."
+  echo "  --> Connect with 138.197.110.197:${local_port}"
   echo ""
   echo '##############################'
   echo ""
