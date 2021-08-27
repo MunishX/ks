@@ -7,7 +7,7 @@ echo ""
 
 if [ -e /etc/grub.d/40_custom ]
 then
-echo "Starting New CentOS 7 Installation Process"
+echo "Starting New Ubuntu 20 Installation Process"
 else
 echo "Grub2 not available. Aborting Process"
 exit 0
@@ -54,7 +54,7 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
 #export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
 
-export MIRROR="https://mirror.nl.leaseweb.net/centos-vault/8.3.2011/BaseOS/x86_64/os/"
+export MIRROR="my.fastserver.me/html/fastx/files/ubuntu/iso/"
 
 # yum -y install bind-utils
 # ip route get $(dig +short google.com | tail -1)
@@ -66,8 +66,8 @@ export GW=$(ip route|grep default | awk '{print $3}' | head -1)
 rm -rf /boot/{vmlinuz,initrd.img}
 rm -rf /boot/${KSFName}
 
-curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
-curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
+curl -o /boot/vmlinuz ${MIRROR}casper/vmlinuz
+curl -o /boot/initrd.img ${MIRROR}casper/initrd
 curl -o /boot/${KSFName} ${KSURL}
 
 #    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL
