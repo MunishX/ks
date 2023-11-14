@@ -7,7 +7,7 @@ echo ""
 
 if [ -e /etc/grub.d/40_custom ]
 then
-echo "Starting New Rocky 9 Installation Process (over centos 7)"
+echo "Starting New Rocky 9 Installation Process"
 else
 echo "Grub2 not available. Aborting Process"
 exit 0
@@ -42,9 +42,8 @@ NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | he
 
 #export INSTALL_SRV="http://KICKSTART_SRV_FQDN/"
 
-export KSURL="https://raw.githubusercontent.com/munishgaurav5/ks/master/HZ/hdd.cfg"
+export KSURL="https://raw.githubusercontent.com/munishgaurav5/ks/master/HZ/hdd_rocky9.cfg"
 export KSFName="ks.cfg"
-export ISOName="cos.iso"
 export DNS1=8.8.8.8
 export DNS2=8.8.4.4
 
@@ -55,7 +54,8 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
 #export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
 
-export MIN_ISO="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/isos/x86_64/CentOS-7-x86_64-Minimal-1810.iso"
+#export MIRROR="https://mirror.nl.leaseweb.net/centos-vault/8.3.2011/BaseOS/x86_64/os/"
+export MIRROR="https://mirror.leaseweb.com/rockylinux/9.3/BaseOS/x86_64/os/"
 
 # yum -y install bind-utils
 # ip route get $(dig +short google.com | tail -1)
@@ -66,13 +66,10 @@ export GW=$(ip route|grep default | awk '{print $3}' | head -1)
 
 rm -rf /boot/{vmlinuz,initrd.img}
 rm -rf /boot/${KSFName}
-rm -rf /boot/${ISOName}
 
-#curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
-#curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
+curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
+curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 curl -o /boot/${KSFName} ${KSURL}
-curl -o /boot/${ISOName} ${MIN_ISO}
-
 
 #    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL
 # inst.vncconnect=${IPADDR}:5500 # inst.vnc inst.vncpassword=changeme headless
@@ -115,16 +112,6 @@ Boot_device=${NETWORK_INTERFACE_NAME}
 #Boot_device="eth0"
 #PREFIX=24
 
-
-
-#menuentry "reinstall" {
-#    set root=hd0,msdos1
-#    insmod part_msdos
-#    linux /boot/cos/images/pxeboot/vmlinuz inst.repo=http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/  inst.ks=hd:sda1:/boot/ks.cfg   inst.lang=en_US inst.keymap=us inst.headless
-#    initrd /boot/cos/images/pxeboot/initrd.img
-#}
-
-
 ###!/bin/sh
 ##exec tail -n +3 $0
 
@@ -136,31 +123,22 @@ Boot_device=${NETWORK_INTERFACE_NAME}
      boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $1}'`
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
-    insmod part_msdos
     $root_value
-    set isofile=/\${ISOName}
-    loopback loop $isofile
-    probe --set isouuid --fs-uuid (loop)
-    linux (loop)/isolinux/vmlinuz root=live:UUID=\${isouuid} iso-scan/filename=\${isofile} inst.repo=file:///run/initramfs/live quiet inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
-    initrd (loop)/isolinux/initrd.img
+    linux /vmlinuz inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
+    initrd /initrd.img
 }
 EOF
      else
      boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
 cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
-    insmod part_msdos
     $root_value
-    set isofile=/boot/${ISOName}
-    loopback loop \$isofile
-    probe --set isouuid --fs-uuid (loop)
-    linux (loop)/isolinux/vmlinuz root=live:UUID=\${isouuid} iso-scan/filename=\${isofile} inst.repo=file:///run/initramfs/live quiet inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc
-    initrd (loop)/isolinux/initrd.img
+    linux /boot/vmlinuz inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
+    initrd /boot/initrd.img
 }
 EOF
      fi
 
-#file:///images/install/squashfs.img
 #ip=dhcp nameserver=$DNS1 nameserver=$DNS2  
 #ip=${IPADDR}
 #ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):$Boot_device:off nameserver=$DNS1 nameserver=$DNS2 inst.vnc inst.vncconnect=${IPADDR}:1 inst.vncpassword=changeme inst.headless 
@@ -181,7 +159,6 @@ then
 grub2-mkconfig
 grub2-mkconfig --output=${grub_out_file}
 grubby --info=ALL
-
 #grub2-mkconfig --output=/boot/grub2/grub.cfg
 
 grubby --default-index
@@ -196,9 +173,10 @@ if [[ $os_type = "apt" ]]
 then
 
 sudo update-grub
-grub-reboot  "reinstall"
-grub-editenv list
 
+grub-reboot  "reinstall"
+
+grub-editenv list
 fi
 
 # install grub-customizer
