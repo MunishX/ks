@@ -1,13 +1,13 @@
 #/bin/bash
 
-# cd /tmp && yum install wget -y && wget https://github.com/munishgaurav5/ks/raw/master/HZ/hdd_net_install.sh && chmod 777 hdd_net_install.sh && ./hdd_net_install.sh 
+# cd /tmp && yum install wget -y && wget https://github.com/munishgaurav5/ks/raw/master/HZ/hdd_net_install_rocky9.sh && chmod 777 hdd_net_install_rocky9.sh && ./hdd_net_install_rocky9.sh 
 
 echo ""
 echo ""
 
 if [ -e /etc/grub.d/40_custom ]
 then
-echo "Starting New CentOS 7 Installation Process"
+echo "Starting New Rocky 9 Installation Process (over centos 7)"
 else
 echo "Grub2 not available. Aborting Process"
 exit 0
