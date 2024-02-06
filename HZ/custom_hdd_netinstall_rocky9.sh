@@ -76,7 +76,7 @@ curl -o /boot/${KSFName} ${KSURL}
 
 sleep 2
 
-sed -i "s/___URL___/${MIRROR}/" /boot/${KSFName}
+sed -i "s@___URL___@${MIRROR}@" /boot/${KSFName}
 sed -i "s/___DEVICE___/${NETWORK_INTERFACE_NAME}/" /boot/${KSFName}
 sed -i "s/___GATEWAY___/${GW}/" /boot/${KSFName}
 sed -i "s/___IP___/${IPADDR}/" /boot/${KSFName}
