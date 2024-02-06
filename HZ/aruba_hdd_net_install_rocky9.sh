@@ -45,8 +45,10 @@ NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | he
 
 export KSURL="https://raw.githubusercontent.com/munishgaurav5/ks/master/HZ/aruba_hdd_rocky9.cfg"
 export KSFName="ks.cfg"
-export DNS1=8.8.8.8
-export DNS2=8.8.4.4
+export DNS1=62.149.190.150
+export DNS2=217.61.55.10
+#export DNS1=8.8.8.8
+#export DNS2=8.8.4.4
 
 #export MIRROR="http://mirror.ircam.fr/pub/CentOS/7.2.1511/os/x86_64/"
 #export MIRROR="http://mirror.nl.leaseweb.net/centos/7/os/x86_64/"
