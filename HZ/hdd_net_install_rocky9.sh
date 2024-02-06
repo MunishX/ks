@@ -33,6 +33,7 @@ fi
 
 NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | head -1)"
 #NETWORK_INTERFACE_NAME="em22"
+
 ###########
 
 # author: François Cami <fcami@fedoraproject.org>
