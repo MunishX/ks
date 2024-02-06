@@ -1,6 +1,6 @@
 #/bin/bash
 
-# cd /tmp && rm -rf aruba_hdd_net_install_rocky9.sh && yum install wget -y && wget https://github.com/munishgaurav5/ks/raw/master/HZ/aruba_hdd_net_install_rocky9.sh && chmod 777 aruba_hdd_net_install_rocky9.sh && ./aruba_hdd_net_install_rocky9.sh 
+# cd /tmp && rm -rf custom_hdd_netinstall_rocky9.sh && yum install wget -y && wget https://github.com/munishgaurav5/ks/raw/master/HZ/custom_hdd_netinstall_rocky9.sh && chmod 777 custom_hdd_netinstall_rocky9.sh && ./custom_hdd_netinstall_rocky9.sh 
 
 echo ""
 echo ""
