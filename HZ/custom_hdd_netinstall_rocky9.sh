@@ -55,10 +55,10 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.inode.at/centos/7.3.1611/os/x86_64/"
 #export MIRROR="http://mirror.imt-systems.com/centos/7/os/x86_64/"  
 #export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
-#export MIRROR="https://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
+export MIRROR="https://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
 
 #export MIRROR="https://mirror.nl.leaseweb.net/centos-vault/8.3.2011/BaseOS/x86_64/os/"
-export MIRROR="https://mirror.leaseweb.com/rockylinux/9.3/BaseOS/x86_64/os/"
+#export MIRROR="https://mirror.leaseweb.com/rockylinux/9.3/BaseOS/x86_64/os/"
 
 # yum -y install bind-utils
 # ip route get $(dig +short google.com | tail -1)
