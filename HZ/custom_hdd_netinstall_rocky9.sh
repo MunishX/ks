@@ -137,7 +137,7 @@ cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
     #linux /vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:fast:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
-    linux /vmlinuz inst.repo=$MIRROR inst.ks=${KSURL} inst.lang=en_US inst.keymap=us inst.vnc 
+    linux /vmlinuz inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
     #linux /vmlinuz ip=dhcp inst.repo=$MIRROR inst.ks=${KSURL} inst.lang=en_US inst.keymap=us inst.vnc 
     initrd /initrd.img
 }
@@ -148,7 +148,7 @@ cat << EOF >> /etc/grub.d/40_custom
 menuentry "reinstall" {
     $root_value
     #linux /boot/vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:fast:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
-    linux /boot/vmlinuz inst.repo=$MIRROR inst.ks=${KSURL} inst.lang=en_US inst.keymap=us inst.vnc 
+    linux /boot/vmlinuz inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
     #linux /boot/vmlinuz ip=dhcp inst.repo=$MIRROR inst.ks=${KSURL} inst.lang=en_US inst.keymap=us inst.vnc 
     initrd /boot/initrd.img
 }
