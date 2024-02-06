@@ -74,6 +74,13 @@ curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
 curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 curl -o /boot/${KSFName} ${KSURL}
 
+sed -i "s/___URL___/${MIRROR}/" /boot/${KSFName}
+sed -i "s/___DEVICE___/${NETWORK_INTERFACE_NAME}/" /boot/${KSFName}
+sed -i "s/___GATEWAY___/${GW}/" /boot/${KSFName}
+sed -i "s/___IP___/${IPADDR}/" /boot/${KSFName}
+sed -i "s/___DNS1___/${DNS1}/" /boot/${KSFName}
+sed -i "s/___DNS2___/${DNS2}/" /boot/${KSFName}
+
 #    linux /vmlinuz net.ifnames=0 biosdevname=0 ip=${IPADDR}::${GW}:${PREFIX}:$(hostname):eth0:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=$KSURL
 # inst.vncconnect=${IPADDR}:5500 # inst.vnc inst.vncpassword=changeme headless
 # inst.vnc inst.vncpassword=changeme inst.headless  inst.lang=en_US inst.keymap=us
