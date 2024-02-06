@@ -74,6 +74,8 @@ curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
 curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 curl -o /boot/${KSFName} ${KSURL}
 
+sleep 5
+
 sed -i "s/___URL___/${MIRROR}/" /boot/${KSFName}
 sed -i "s/___DEVICE___/${NETWORK_INTERFACE_NAME}/" /boot/${KSFName}
 sed -i "s/___GATEWAY___/${GW}/" /boot/${KSFName}
