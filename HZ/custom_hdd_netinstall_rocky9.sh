@@ -55,7 +55,7 @@ export DNS2=8.8.4.4
 #export MIRROR="http://mirror.inode.at/centos/7.3.1611/os/x86_64/"
 #export MIRROR="http://mirror.imt-systems.com/centos/7/os/x86_64/"  
 #export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.2.1511/os/x86_64/"
-export MIRROR="http://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
+export MIRROR="https://mirror.nl.leaseweb.net/centos-vault/7.6.1810/os/x86_64/"
 
 #export MIRROR="https://mirror.nl.leaseweb.net/centos-vault/8.3.2011/BaseOS/x86_64/os/"
 #export MIRROR="https://mirror.leaseweb.com/rockylinux/9.3/BaseOS/x86_64/os/"
@@ -74,9 +74,9 @@ curl -o /boot/vmlinuz ${MIRROR}images/pxeboot/vmlinuz
 curl -o /boot/initrd.img ${MIRROR}images/pxeboot/initrd.img
 curl -o /boot/${KSFName} ${KSURL}
 
-sleep 5
+sleep 2
 
-sed -i "s/___URL___/${MIRROR}/" /boot/${KSFName}
+sed -i "s/___URL___/$MIRROR/" /boot/${KSFName}
 sed -i "s/___DEVICE___/${NETWORK_INTERFACE_NAME}/" /boot/${KSFName}
 sed -i "s/___GATEWAY___/${GW}/" /boot/${KSFName}
 sed -i "s/___IP___/${IPADDR}/" /boot/${KSFName}
