@@ -102,6 +102,16 @@ echo "Grub2 config file not found. Aborting Process"
 exit 0
 fi
 
+# detect root via uuid
+if [[ -z "$root_value" ]]; then
+    root_uuid=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $2}'` 
+    root_value="search --no-floppy --fs-uuid --set=root ${root_uuid}"
+    echo "root_uuid_line: $root_value"
+else
+    echo "root_line = $root_value"
+fi
+
+
 echo ""
 echo "$root_value"
 echo ""
