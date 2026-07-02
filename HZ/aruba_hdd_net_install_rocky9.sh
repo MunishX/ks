@@ -206,6 +206,8 @@ fi
 # you can use grub2-set-default 'MenuEntry' 
 # to change the default boot
 
+echo ""
+echo ""
 echo "CURRENT DNS"
 ( nmcli dev list || nmcli dev show ) 2>/dev/null | grep DNS
 
