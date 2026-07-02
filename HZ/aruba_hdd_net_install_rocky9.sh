@@ -131,11 +131,17 @@ Boot_device=${NETWORK_INTERFACE_NAME}
 
      #boot_part=`df -h | grep -oP "/boot"`
 
+     # clear old reinstall entries if present
+     sed -i '/reinstall_menu_entry_start/,$d' /etc/grub.d/40_custom
+     
      boot_part=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $3}'`
      if [[ $boot_part = "/boot" ]] 
      then
      boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $1}'`
+
+     
 cat << EOF >> /etc/grub.d/40_custom
+# reinstall_menu_entry_start
 menuentry "reinstall" {
     $root_value
     linux /vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:fast:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
@@ -146,6 +152,7 @@ EOF
      else
      boot_hd=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
 cat << EOF >> /etc/grub.d/40_custom
+# reinstall_menu_entry_start
 menuentry "reinstall" {
     $root_value
     linux /boot/vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:fast:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
