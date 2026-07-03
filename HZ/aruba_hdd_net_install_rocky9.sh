@@ -102,6 +102,18 @@ echo "Grub2 config file not found. Aborting Process"
 exit 0
 fi
 
+# detect net.ifnames via uuid
+ENDLINE=""
+SEARCHWORD="net.ifnames=0"
+if grep -nE "^[^#]*\\b${SEARCHWORD}\\b" ${grub_out_file}
+then 
+echo "net.ifnames present, added.."
+ENDLINE=" net.ifnames=0 biosdevname=0 "
+else 
+echo "net.ifnames not found, ignoring.."
+fi
+
+
 # detect root via uuid
 if [[ -z "$root_value" ]]; then
     root_uuid=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $2}'` 
@@ -144,7 +156,7 @@ cat << EOF >> /etc/grub.d/40_custom
 # reinstall_menu_entry_start
 menuentry "reinstall" {
     $root_value
-    linux /vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:fast:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
+    linux /vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:fast:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc ${ENDLINE}
     #linux /vmlinuz ip=dhcp inst.repo=$MIRROR inst.ks=${KSURL} inst.lang=en_US inst.keymap=us inst.vnc 
     initrd /initrd.img
 }
@@ -155,7 +167,7 @@ cat << EOF >> /etc/grub.d/40_custom
 # reinstall_menu_entry_start
 menuentry "reinstall" {
     $root_value
-    linux /boot/vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:fast:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc 
+    linux /boot/vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:fast:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:${boot_hd}:/boot/${KSFName} inst.lang=en_US inst.keymap=us inst.vnc ${ENDLINE}
     #linux /boot/vmlinuz ip=dhcp inst.repo=$MIRROR inst.ks=${KSURL} inst.lang=en_US inst.keymap=us inst.vnc 
     initrd /boot/initrd.img
 }
