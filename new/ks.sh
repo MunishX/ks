@@ -118,10 +118,32 @@ prepare_grub2() {
 
 }
 
+prefix_to_netmask() {
+    local prefix=$1
+
+    # Validate input is an integer between 0 and 32
+    if [[ ! "$prefix" =~ ^[0-9]+$ ]] || [ "$prefix" -lt 0 ] || [ "$prefix" -gt 32 ]; then
+        echo "Error: Prefix must be an integer between 0 and 32." >&2
+        return 1
+    fi
+
+    # Calculate 32-bit mask value and shift mask into position
+    local mask=$(( 0xffffffff << (32 - prefix) ))
+
+    # Extract the 4 individual octets using bitwise AND and right shifts
+    local o1=$(( (mask >> 24) & 255 ))
+    local o2=$(( (mask >> 16) & 255 ))
+    local o3=$(( (mask >> 8)  & 255 ))
+    local o4=$((  mask        & 255 ))
+
+    echo "${o1}.${o2}.${o3}.${o4}"
+}
+
 prepare_network() {
     NETWORK_INTERFACE_NAME="$(ip -o -4 route show to default | awk '{print $5}' | head -1)"
     IPADDR=$(ip a s "$NETWORK_INTERFACE_NAME" | grep "inet " | awk '{print $2}' | awk -F '/' '{print $1}' | head -1)
     PREFIX=$(ip a s "$NETWORK_INTERFACE_NAME" | grep "inet " | awk '{print $2}' | awk -F '/' '{print $2}' | head -1)
+    NETMASK=$(prefix_to_netmask  "${PREFIX}")
     GW=$(ip route | grep default | awk '{print $3}' | head -1)
     DNS1=8.8.8.8
     DNS2=8.8.4.4
@@ -325,7 +347,8 @@ update_ks_file(){
     sed -i "s/___IPADDR___/${IPADDR}/g" "${TARGET_PATH}${KSFName}"
     sed -i "s/___DNS1___/${DNS1}/g" "${TARGET_PATH}${KSFName}"
     sed -i "s/___DNS2___/${DNS2}/g" "${TARGET_PATH}${KSFName}"
-    sed -i "s/___PREFIX___/${PREFIX}/g" "${TARGET_PATH}${KSFName}"
+    #sed -i "s/___PREFIX___/${PREFIX}/g" "${TARGET_PATH}${KSFName}"
+    sed -i "s/___NETMASK___/${NETMASK}/g" "${TARGET_PATH}${KSFName}"
     sed -i "s/___HOSTNAME___/${HOSTNAME}/g" "${TARGET_PATH}${KSFName}"
     echo "[info] ks.cfg Variables replaced with their value..."
 }
