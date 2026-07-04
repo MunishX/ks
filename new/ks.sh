@@ -11,8 +11,17 @@ REQUIRED_SPACE_MB=700
 ###################
 ###  functions  ###
 ###################
+
+init(){
+    echo ""
+    echo ""
+    echo "========================================="
+    echo "======== KS Rocky 9 Installation ========"
+    echo "========================================="
+    echo ""
+}
 read_hostname(){
-    read -p "Enter new server's hostname: (ex: host.domain.com)" HOSTNAME
+    read -p "Enter new server's Hostname: (ex: host.domain.com) : " HOSTNAME
     if [[ -z "$HOSTNAME" ]]; then
             echo "[error] HOSTNAME cannot be empty, Failed.. Exiting..."
             exit 1
@@ -251,7 +260,7 @@ download_boot_image_files(){
         echo "[info] File Saved to: ${TARGET_PATH}initrd.img"
     fi
 
-    status_code=$(curl -w "%{http_code}" -o ${TARGET_PATH}${KSFName} ${KSURL})
+    status_code=$(curl -w -L "%{http_code}" -o ${TARGET_PATH}${KSFName} ${KSURL})
     if [ "$status_code" -ne 200 ]; then
         echo "[error] Downloading ${KSURL} failed, with status $status_code"
         exit 1
@@ -341,6 +350,7 @@ setup_complete(){
 
 }
 
+init
 read_hostname
 check_sudo
 detect_os
