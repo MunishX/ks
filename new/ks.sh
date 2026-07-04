@@ -12,21 +12,6 @@ REQUIRED_SPACE_MB=700
 ###  functions  ###
 ###################
 
-init(){
-    echo ""
-    echo ""
-    echo "========================================="
-    echo "======== KS Rocky 9 Installation ========"
-    echo "========================================="
-    echo ""
-}
-read_hostname(){
-    read -p "Enter new server's Hostname: (ex: host.domain.com) : " HOSTNAME
-    if [[ -z "$HOSTNAME" ]]; then
-            echo "[error] HOSTNAME cannot be empty, Failed.. Exiting..."
-            exit 1
-    fi
-}
 check_sudo(){
     if [ "$EUID" -ne 0 ]; then
       echo "Please run this script with sudo or as root."
@@ -43,6 +28,24 @@ check_sudo(){
     #fi
 
 }
+
+init(){
+    echo ""
+    echo ""
+    echo "========================================="
+    echo "======== KS Rocky 9 Installation ========"
+    echo "========================================="
+    echo ""
+}
+
+read_hostname(){
+    read -p "Enter new server's Hostname: (ex: host.domain.com) : " HOSTNAME
+    if [[ -z "$HOSTNAME" ]]; then
+            echo "[error] HOSTNAME cannot be empty, Failed.. Exiting..."
+            exit 1
+    fi
+}
+
 detect_os(){
     os_type="NULL"
 
@@ -63,6 +66,19 @@ detect_os(){
     else
     echo "[info] Supported OS found. OS_Type: $os_type"
     fi
+}
+
+detect_boot_mode(){
+    if [ -d /sys/firmware/efi ] && [ -d /sys/firmware/efi/efivars ]; then
+        BOOT_MODE="UEFI"
+        LINUX_VAR=" linuxefi "
+        INITRD_VAR=" initrdefi "
+    else
+        BOOT_MODE="BIOS"
+        LINUX_VAR=" linux "
+        INITRD_VAR=" initrd "
+    fi
+    echo "[info] Boot mode: $BOOT_MODE"
 }
 
 prepare_grub2() {
@@ -385,10 +401,11 @@ setup_complete(){
 
 }
 
+check_sudo
 init
 read_hostname
-check_sudo
 detect_os
+detect_boot_mode
 prepare_grub2
 prepare_network
 prepare_os
