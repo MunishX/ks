@@ -71,12 +71,12 @@ detect_os(){
 detect_boot_mode(){
     if [ -d /sys/firmware/efi ] && [ -d /sys/firmware/efi/efivars ]; then
         BOOT_MODE="UEFI"
-        LINUX_VAR=" linuxefi "
-        INITRD_VAR=" initrdefi "
+        LINUX_VAR="linuxefi "
+        INITRD_VAR="initrdefi "
     else
         BOOT_MODE="BIOS"
-        LINUX_VAR=" linux "
-        INITRD_VAR=" initrd "
+        LINUX_VAR="linux "
+        INITRD_VAR="initrd "
     fi
     echo "[info] Boot mode: $BOOT_MODE"
 }
@@ -332,8 +332,8 @@ menuentry "reinstall" {
     insmod raid6rec
     
     $ROOT_UUID_LINE
-    linux ${BOOT_PATH}vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:${HOSTNAME}:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:UUID=${ROOT_UUID}:${BOOT_PATH}${KSFName} inst.lang=en_US inst.keymap=us inst.vnc ${CONFIG_APPEND_LINE}
-    initrd ${BOOT_PATH}initrd.img
+    ${LINUX_VAR} ${BOOT_PATH}vmlinuz ip=${IPADDR}::${GW}:${PREFIX}:${HOSTNAME}:${NETWORK_INTERFACE_NAME}:off nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:UUID=${ROOT_UUID}:${BOOT_PATH}${KSFName} inst.lang=en_US inst.keymap=us inst.vnc ${CONFIG_APPEND_LINE}
+    ${INITRD_VAR} ${BOOT_PATH}initrd.img
 }
 # reinstall_menu_entry_end
 EOF
@@ -354,6 +354,8 @@ update_grub2_menu_list(){
         #grubby --default-index
         grub2-reboot  "reinstall"
         #grubby --default-index
+
+        #grub2-set-default "My Custom Rocky Linux"
 
         grub2-editenv list
     fi
