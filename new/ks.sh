@@ -319,7 +319,7 @@ update_grub2_menu_list(){
 }
 
 update_ks_file(){
-    sed -i "s/___MIRROR___/${MIRROR}/g" "${TARGET_PATH}${KSFName}"
+    sed -i "s|___MIRROR___|${MIRROR}|g" "${TARGET_PATH}${KSFName}"
     sed -i "s/___NETWORK_INTERFACE_NAME___/${NETWORK_INTERFACE_NAME}/g" "${TARGET_PATH}${KSFName}"
     sed -i "s/___GW___/${GW}/g" "${TARGET_PATH}${KSFName}"
     sed -i "s/___IPADDR___/${IPADDR}/g" "${TARGET_PATH}${KSFName}"
