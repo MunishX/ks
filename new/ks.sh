@@ -227,13 +227,13 @@ validate_all(){
 install_required_tools(){
 
     if [[ "$os_type" == "yum" ]]; then
-        yum -y install nano wget curl net-tools lsof zip unzip sudo sed
         echo "[info] Installing basic tools via yum..."
+        yum -y install nano wget curl net-tools lsof zip unzip sudo sed
         return 0
     fi
     if [[ "$os_type" == "apt" ]]; then
-        apt-get -y install nano wget curl net-tools lsof zip unzip sudo sed
         echo "[info] Installing basic tools via apt..."
+        apt-get -y install nano wget curl net-tools lsof zip unzip sudo sed
         return 0
     fi
 
@@ -260,7 +260,7 @@ download_boot_image_files(){
         echo "[info] File Saved to: ${TARGET_PATH}initrd.img"
     fi
 
-    status_code=$(curl -w -L "%{http_code}" -o ${TARGET_PATH}${KSFName} ${KSURL})
+    status_code=$(curl -w "%{http_code}" -L -o ${TARGET_PATH}${KSFName} ${KSURL})
     if [ "$status_code" -ne 200 ]; then
         echo "[error] Downloading ${KSURL} failed, with status $status_code"
         exit 1
@@ -370,5 +370,4 @@ add_reinstall_grub2_entry
 update_grub2_menu_list
 update_ks_file
 setup_complete
-
 
