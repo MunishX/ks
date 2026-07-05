@@ -81,6 +81,16 @@ detect_boot_mode(){
     echo "[info] Boot mode: $BOOT_MODE"
 }
 
+detect_disk(){
+    if lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,PARTUUID,UUID,PTTYPE >/dev/null 2>&1; then 
+        echo "[info] Disk Partition TYPE: GPT"
+        lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,PARTUUID,UUID,PTTYPE
+    else
+        echo "[info] Disk Partition TYPE: MBR"
+        lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,PARTUUID,UUID
+    fi
+}
+
 prepare_grub2() {
     # check Grub2 update file present or not (required)
     if [ -e /etc/grub.d/40_custom ]
@@ -287,6 +297,7 @@ download_boot_image_files(){
     else
         echo "[info] Downloaded ${MIRROR}images/pxeboot/vmlinuz success, with status 200 OK. "
         echo "[info] File Saved to: ${TARGET_PATH}vmlinuz"
+        chmod +x ${TARGET_PATH}vmlinuz
     fi
 
     status_code=$(curl -w "%{http_code}" -o ${TARGET_PATH}initrd.img ${MIRROR}images/pxeboot/initrd.img)
@@ -337,6 +348,7 @@ menuentry "reinstall" {
 }
 # reinstall_menu_entry_end
 EOF
+    chmod +x /etc/grub.d/40_custom
     echo "[info] Grub2 Menu Entry 'reinstall' added..."
 }
 
@@ -408,6 +420,7 @@ init
 read_hostname
 detect_os
 detect_boot_mode
+detect_disk
 prepare_grub2
 prepare_network
 prepare_os
