@@ -82,12 +82,12 @@ detect_boot_mode(){
 }
 
 detect_disk(){
-    if lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,PARTUUID,UUID,PTTYPE >/dev/null 2>&1; then 
+    if lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,LABEL,PARTUUID,UUID,PTTYPE >/dev/null 2>&1; then 
         echo "[info] Disk Partition TYPE: GPT"
-        lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,PARTUUID,UUID,PTTYPE
+        lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,LABEL,PARTUUID,UUID,PTTYPE
     else
         echo "[info] Disk Partition TYPE: MBR"
-        lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,PARTUUID,UUID
+        lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,LABEL,PARTUUID,UUID
     fi
 }
 
@@ -261,6 +261,10 @@ prepare_uuid(){
     #if [[ -z "$ROOT_UUID_LINE" ]]; then
     #    ROOT_UUID=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $2}'`
     #    ROOT_UUID_LINE="search --no-floppy --fs-uuid --set=root ${ROOT_UUID}"
+    #    #ROOT_UUID_LINE="search --no-floppy --partuuid --set=root e93f4fe1-269b-40fe-9e68-2a4667321d86"
+    #    #ROOT_UUID_LINE="search --label --set=root ROCKY-9-6-X86_64"
+    #    #raid except mdraid is not supported much
+    #    # uuid or partuuid info : blkid  or  lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,LABEL,PARTUUID,UUID,PTTYPE
     #    echo "ROOT_UUID_LINE: $ROOT_UUID_LINE"
     #else
     #    echo "root_line = $ROOT_UUID_LINE"
@@ -352,6 +356,12 @@ EOF
     echo "[info] Grub2 Menu Entry 'reinstall' added..."
 }
 
+#--set root= must point to vmlinuz and initrd.img
+#inst.ks=hd:md2:/ks.cfg
+#inst.ks=hd:/dev/md2:/ks.cfg
+#inst.ks=hd:UUID=c8c586d7-708c-4ae0-a07e-6d48e37584ad:/ks.cfg
+#xfs_admin -L BOOT /dev/md2
+#inst.ks=hd:LABEL=BOOT:/ks.cfg
 
 update_grub2_menu_list(){
     sleep 1
