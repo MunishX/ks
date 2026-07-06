@@ -244,8 +244,8 @@ prepare_uuid(){
 
     # target_path = /
     if [[ "$TARGET_PATH" == "/" ]]; then
-    ROOT_UUID=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $2}'`
     ROOT_DEV=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
+    ROOT_UUID=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $2}'`
     BOOT_PATH="/"
         if [[ -z "$ROOT_UUID" ]]; then
             echo "[error] Partition with path / is not found, Failed.. Exiting..."
@@ -253,19 +253,26 @@ prepare_uuid(){
         fi
     fi
 
+    echo "[info] DEV of Target path $TARGET_PATH is: $ROOT_DEV "
+    echo "[info] UUID of Target path $TARGET_PATH is: $ROOT_UUID "
+
     ROOT_UUID_LINE="search --no-floppy --fs-uuid --set=root ${ROOT_UUID}"
-    
+
+    IS_RAID=0
     if mdadm --detail ${ROOT_DEV} | grep -E '/dev/'; then
+        IS_RAID=1
+        ROOT_MDUUID=mdadm --detail ${ROOT_DEV} | grep -E '/dev/' | awk 'NR==2 {print $7}'
+        ROOT_MDUUID_CLEAN="${ROOT_MDUUID//-/}"
+        ROOT_UUID_LINE="set root='mduuid/${ROOT_MDUUID_CLEAN}'";
         echo "[info] DEV of Target path $TARGET_PATH is RAID present: YES ";
-        ROOT_UUID_LINE="set root='mduuid/${ROOT_UUID}'";
+        echo "[info] MDUUID of Target path $TARGET_PATH is: $ROOT_MDUUID "
+        echo "[info] MDUUID of Target path $TARGET_PATH (clean) is: $ROOT_MDUUID_CLEAN "
     else
         echo "[info] DEV of Target path $TARGET_PATH is RAID present: NO ";
     fi
-    
-    echo "[info] DEV of Target path $TARGET_PATH is: $ROOT_DEV "
-    echo "[info] UUID of Target path $TARGET_PATH is: $ROOT_UUID "
-    
+
     echo "[info] final ROOT_UUID_LINE: $ROOT_UUID_LINE "
+    
 
     # detect root via set root line in grub
     #ROOT_UUID_LINE=`grep "set root=" /boot/grub2/grub.cfg | head -1`
