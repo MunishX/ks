@@ -105,6 +105,14 @@ prepare_grub2() {
     exit 0
     fi
 
+    if [ -e /etc/default/grub ]
+    then
+    echo "[info] Grub2 timeout file found."
+    else
+    echo "[error] Grub2 timeout file not available. Exiting..."
+    exit 0
+    fi
+
     # get Grub2 config file path
     grub_out_file="NULL"
     #ROOT_UUID_LINE="NULL"
@@ -410,6 +418,7 @@ EOF
 #inst.ks=hd:LABEL=BOOT:/ks.cfg
 
 update_grub2_menu_list(){
+    sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=3/' /etc/default/grub
     sleep 1
 
     if [[ $os_type = "yum" ]]
