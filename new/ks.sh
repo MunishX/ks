@@ -270,34 +270,25 @@ prepare_uuid(){
     ROOT_UUID_LINE="search --no-floppy --fs-uuid --set=root ${ROOT_UUID}"
 
     
+    #IS_RAID=0
+    #mdadm --detail ${ROOT_DEV} > /dev/null 2>&1
+    #EXIT_CODE=$?
     
-    #if grep -nE "^[^#]*\\b${SEARCHWORD}\\b" ${grub_out_file}
+    #if [ $EXIT_CODE -eq 0 ]
     #then
-    #echo "[info] net.ifnames found in grub2 config, updated CONFIG_APPEND_LINE.."
-    #CONFIG_APPEND_LINE=" net.ifnames=0 biosdevname=0 "
+    #    IS_RAID=1
+    #    #ROOT_MDUUID_DEV=`mdadm --detail ${ROOT_DEV} | grep -E '/dev/' |  awk '{print $2}'`
+    #    ROOT_MDUUID_DEV=`mdadm --detail ${ROOT_DEV} | grep -E '/dev/' | awk 'NR==2 {print $7}'`
+    #    ROOT_MDUUID=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "${ROOT_MDUUID_DEV}" | head -1 | awk  '{print $2}'`
+    #    ROOT_MDUUID_CLEAN="${ROOT_MDUUID//-/}"
+    #    ROOT_UUID_LINE="set root='mduuid/${ROOT_MDUUID_CLEAN}'";
+    #    echo "[info] DEV of Target path $TARGET_PATH is RAID present: YES ";
+    #    echo "[info] MDUUID_DEV of Target path $TARGET_PATH is: $ROOT_MDUUID_DEV "
+    #    echo "[info] MDUUID of Target path $TARGET_PATH is: $ROOT_MDUUID "
+    #    echo "[info] MDUUID of Target path $TARGET_PATH (clean) is: $ROOT_MDUUID_CLEAN "
     #else
-    #echo "[info] net.ifnames not found in grub2 config, ignoring CONFIG_APPEND_LINE.."
+    #    echo "[info] DEV of Target path $TARGET_PATH is RAID present: NO ";
     #fi
-
-    IS_RAID=0
-    mdadm --detail ${ROOT_DEV} > /dev/null 2>&1
-    EXIT_CODE=$?
-    
-    if [ $EXIT_CODE -eq 0 ]
-    then
-        IS_RAID=1
-        #ROOT_MDUUID_DEV=`mdadm --detail ${ROOT_DEV} | grep -E '/dev/' |  awk '{print $2}'`
-        ROOT_MDUUID_DEV=`mdadm --detail ${ROOT_DEV} | grep -E '/dev/' | awk 'NR==2 {print $7}'`
-        ROOT_MDUUID=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "${ROOT_MDUUID_DEV}" | head -1 | awk  '{print $2}'`
-        ROOT_MDUUID_CLEAN="${ROOT_MDUUID//-/}"
-        ROOT_UUID_LINE="set root='mduuid/${ROOT_MDUUID_CLEAN}'";
-        echo "[info] DEV of Target path $TARGET_PATH is RAID present: YES ";
-        echo "[info] MDUUID_DEV of Target path $TARGET_PATH is: $ROOT_MDUUID_DEV "
-        echo "[info] MDUUID of Target path $TARGET_PATH is: $ROOT_MDUUID "
-        echo "[info] MDUUID of Target path $TARGET_PATH (clean) is: $ROOT_MDUUID_CLEAN "
-    else
-        echo "[info] DEV of Target path $TARGET_PATH is RAID present: NO ";
-    fi
 
     echo "[info] final ROOT_UUID_LINE: $ROOT_UUID_LINE "
     
