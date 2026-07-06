@@ -272,7 +272,7 @@ prepare_uuid(){
     mdadm --detail ${ROOT_DEV} > /dev/null 2>&1
     EXIT_CODE=$?
     
-    if EXIT_CODE
+    if [ $EXIT_CODE -eq 0 ]
     then
         IS_RAID=1
         ROOT_MDUUID="$(mdadm --detail ${ROOT_DEV} | grep -E '/dev/' | awk 'NR==2 {print $7}')"
