@@ -214,7 +214,8 @@ prepare_os(){
     if [[ "$MIRROR" == *"___OS_VERSION___"* ]]; then
         echo "[info] Variable OS_VERSION Mirror url present!"
         read -e -i "10" -p "Enter Rocky Linux version: " OS_VERSION
-        MIRROR="${MIRROR//___OS_VERSION___/OS_VERSION}"
+        #MIRROR_VAR="$MIRROR"
+        MIRROR="${MIRROR//___OS_VERSION___/$OS_VERSION}"
     fi
 
     echo "[info] Final ROCKY LINUX MIRROR URL : ${MIRROR}"
