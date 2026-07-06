@@ -276,7 +276,7 @@ prepare_uuid(){
     then
         IS_RAID=1
         ROOT_MDUUID_DEV=`mdadm --detail ${ROOT_DEV} | grep -E '/dev/' | awk 'NR==2 {print $7}'`
-        ROOT_MDUUID=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "${ROOT_MDUUID_DEV}$" | head -1 | awk  '{print $2}'`
+        ROOT_MDUUID=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "${ROOT_MDUUID_DEV}$" | head -1 | awk  '{print $2}'`
         ROOT_MDUUID_CLEAN="${ROOT_MDUUID//-/}"
         ROOT_UUID_LINE="set root='mduuid/${ROOT_MDUUID_CLEAN}'";
         echo "[info] DEV of Target path $TARGET_PATH is RAID present: YES ";
