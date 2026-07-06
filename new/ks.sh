@@ -344,9 +344,9 @@ menuentry "reinstall" {
     
     insmod diskfilter
     
-    insmod mdraid
-    #insmod mdraid09
-    #insmod mdraid1x
+    #insmod mdraid
+    insmod mdraid09
+    insmod mdraid1x
     
     #insmod raid5rec
     #insmod raid6rec
