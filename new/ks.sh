@@ -39,7 +39,10 @@ init(){
 }
 
 read_hostname(){
-    read -p "Enter new server's Hostname: (ex: host.domain.com) : " HOSTNAME
+    my_host=$(hostname)
+    #read -p "Enter new server's Hostname: (ex: host.server.com) : " HOSTNAME
+    read -e -i "${my_host}" -p "Enter new server's Hostname (in format host.server.com): " HOSTNAME
+    
     if [[ -z "$HOSTNAME" ]]; then
             echo "[error] HOSTNAME cannot be empty, Failed.. Exiting..."
             exit 1
