@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # cd /tmp && rm -rf ks.sh && yum install wget -y && wget https://github.com/MunishX/ks/raw/refs/heads/master/new/ks.sh && chmod 777 ks.sh && ./ks.sh
-# cd /tmp && rm -rf ks.sh && curl -o ks.sh https://github.com/MunishX/ks/raw/refs/heads/master/new/ks.sh && chmod +x ks.sh && ./ks.sh
+# cd /tmp && rm -rf ks.sh && curl -L -o ks.sh https://github.com/MunishX/ks/raw/refs/heads/master/new/ks.sh && chmod +x ks.sh && ./ks.sh
 
 ###################
 ###  constants  ###
