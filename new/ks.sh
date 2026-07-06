@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # cd /tmp && rm -rf ks.sh && yum install wget -y && wget https://github.com/MunishX/ks/raw/refs/heads/master/new/ks.sh && chmod 777 ks.sh && ./ks.sh
+# cd /tmp && rm -rf ks.sh && curl -o ks.sh https://github.com/MunishX/ks/raw/refs/heads/master/new/ks.sh && chmod +x ks.sh && ./ks.sh
 
 ###################
 ###  constants  ###
@@ -33,7 +34,7 @@ init(){
     echo ""
     echo ""
     echo "========================================="
-    echo "======== KS Rocky 9 Installation ========"
+    echo "======== KS Rocky Installation ========"
     echo "========================================="
     echo ""
 }
@@ -203,9 +204,21 @@ prepare_network() {
 prepare_os(){
     # https://rockylinux.mirrors.ovh.net/9/isos/x86_64/
     # https://mirror.de.leaseweb.net/rockylinux/9/isos/x86_64/
-    MIRROR="https://mirror.leaseweb.com/rockylinux/9.8/BaseOS/x86_64/os/"
+    #MIRROR="https://mirror.leaseweb.com/rockylinux/9.8/BaseOS/x86_64/os/"
     KSURL="https://github.com/MunishX/ks/raw/refs/heads/master/new/ks.cfg"
     KSFName="ks.cfg"
+
+    MIRROR="https://mirror.leaseweb.com/rockylinux/___OS_VERSION___/BaseOS/x86_64/os/"
+    read -e -i "${MIRROR}" -p "Enter Rocky Linux /os/ url: " MIRROR
+
+    if [[ "$MIRROR" == *"___OS_VERSION___"* ]]; then
+        echo "[info] Variable OS_VERSION Mirror url present!"
+        read -e -i "10" -p "Enter Rocky Linux version: " OS_VERSION
+        MIRROR="${MIRROR//___OS_VERSION___/OS_VERSION}"
+    fi
+
+    echo "[info] Final ROCKY LINUX MIRROR URL : ${MIRROR}"
+    echo ""
 }
 
 prepare_target_cleanup(){
@@ -404,7 +417,6 @@ menuentry "reinstall" {
     #insmod raid6rec
     
     $ROOT_UUID_LINE
-    #${LINUX_VAR} ${BOOT_PATH}vmlinuz ro rd.auto ip=${IPADDR}::${GW}:${PREFIX}:${HOSTNAME}:${NETWORK_INTERFACE_NAME}:none nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:UUID=${ROOT_UUID}:${BOOT_PATH}${KSFName} inst.lang=en_US inst.keymap=us inst.vnc ${CONFIG_APPEND_LINE}
     ${LINUX_VAR} ${BOOT_PATH}vmlinuz ro rd.auto ip=${IPADDR}::${GW}:${NETMASK}:${HOSTNAME}:${NETWORK_INTERFACE_NAME}:none nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:UUID=${ROOT_UUID}:${BOOT_PATH}${KSFName} inst.lang=en_US inst.keymap=us inst.vnc ${CONFIG_APPEND_LINE}
     ${INITRD_VAR} ${BOOT_PATH}initrd.img
 }
@@ -413,6 +425,8 @@ EOF
     chmod +x /etc/grub.d/40_custom
     echo "[info] Grub2 Menu Entry 'reinstall' added..."
 }
+
+# ${NETMASK} or ${PREFIX} both will work above
 
 #--set root= must point to vmlinuz and initrd.img
 #inst.ks=hd:md2:/ks.cfg
