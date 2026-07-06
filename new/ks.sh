@@ -244,8 +244,8 @@ prepare_uuid(){
 
     # target_path = /
     if [[ "$TARGET_PATH" == "/" ]]; then
-    ROOT_DEV=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
     ROOT_UUID=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $2}'`
+    ROOT_DEV=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
     BOOT_PATH="/"
         if [[ -z "$ROOT_UUID" ]]; then
             echo "[error] Partition with path / is not found, Failed.. Exiting..."
@@ -258,10 +258,24 @@ prepare_uuid(){
 
     ROOT_UUID_LINE="search --no-floppy --fs-uuid --set=root ${ROOT_UUID}"
 
+    
+    
+    #if grep -nE "^[^#]*\\b${SEARCHWORD}\\b" ${grub_out_file}
+    #then
+    #echo "[info] net.ifnames found in grub2 config, updated CONFIG_APPEND_LINE.."
+    #CONFIG_APPEND_LINE=" net.ifnames=0 biosdevname=0 "
+    #else
+    #echo "[info] net.ifnames not found in grub2 config, ignoring CONFIG_APPEND_LINE.."
+    #fi
+
     IS_RAID=0
-    if mdadm --detail ${ROOT_DEV} > /dev/null 2>&1; then
+    mdadm --detail ${ROOT_DEV} > /dev/null 2>&1
+    EXIT_CODE=$?
+    
+    if EXIT_CODE
+    then
         IS_RAID=1
-        ROOT_MDUUID=mdadm --detail ${ROOT_DEV} | grep -E '/dev/' | awk 'NR==2 {print $7}'
+        ROOT_MDUUID="$(mdadm --detail ${ROOT_DEV} | grep -E '/dev/' | awk 'NR==2 {print $7}')"
         ROOT_MDUUID_CLEAN="${ROOT_MDUUID//-/}"
         ROOT_UUID_LINE="set root='mduuid/${ROOT_MDUUID_CLEAN}'";
         echo "[info] DEV of Target path $TARGET_PATH is RAID present: YES ";
