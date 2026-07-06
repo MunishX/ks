@@ -227,11 +227,13 @@ prepare_uuid(){
     # target_path = /boot/
     if [[ "$TARGET_PATH" == "/boot/" ]]; then
         ROOT_UUID=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $2}'`
+        ROOT_DEV=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "/boot$" | head -1 | awk  '{print $1}'`
         BOOT_PATH="/"
         # Check if empty
         if [[ -z "$ROOT_UUID" ]]; then
             echo "[warning] Mount $TARGET_PATH is not found, using Mount / and retrying..."
             ROOT_UUID=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $2}'`
+            ROOT_DEV=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
             BOOT_PATH="/boot/"
             if [[ -z "$ROOT_UUID" ]]; then
                 echo "[error] Partition with path / is not found, Failed.. Exiting..."
@@ -243,6 +245,7 @@ prepare_uuid(){
     # target_path = /
     if [[ "$TARGET_PATH" == "/" ]]; then
     ROOT_UUID=`lsblk -l -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $2}'`
+    ROOT_DEV=`lsblk -lp -o "Name,UUID,MOUNTPOINT" | grep "/$" | head -1 | awk  '{print $1}'`
     BOOT_PATH="/"
         if [[ -z "$ROOT_UUID" ]]; then
             echo "[error] Partition with path / is not found, Failed.. Exiting..."
@@ -251,7 +254,17 @@ prepare_uuid(){
     fi
 
     ROOT_UUID_LINE="search --no-floppy --fs-uuid --set=root ${ROOT_UUID}"
+    
+    if mdadm --detail ${ROOT_DEV} | grep -E '/dev/'; then
+        echo "[info] DEV of Target path $TARGET_PATH is RAID present: YES ";
+        ROOT_UUID_LINE="set root='mduuid/${ROOT_UUID}'";
+    else
+        echo "[info] DEV of Target path $TARGET_PATH is RAID present: NO ";
+    fi
+    
+    echo "[info] DEV of Target path $TARGET_PATH is: $ROOT_DEV "
     echo "[info] UUID of Target path $TARGET_PATH is: $ROOT_UUID "
+    
     echo "[info] final ROOT_UUID_LINE: $ROOT_UUID_LINE "
 
     # detect root via set root line in grub
