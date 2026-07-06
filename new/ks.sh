@@ -418,7 +418,7 @@ menuentry "reinstall" {
     #insmod raid6rec
     
     $ROOT_UUID_LINE
-    ${LINUX_VAR} ${BOOT_PATH}vmlinuz ro rd.auto ip=${IPADDR}::${GW}:${NETMASK}:${HOSTNAME}:${NETWORK_INTERFACE_NAME}:none nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:UUID=${ROOT_UUID}:${BOOT_PATH}${KSFName} inst.lang=en_US inst.keymap=us inst.vnc ${CONFIG_APPEND_LINE}
+    ${LINUX_VAR} ${BOOT_PATH}vmlinuz ro rd.auto ip=${IPADDR}::${GW}:${NETMASK}:${HOSTNAME}:${NETWORK_INTERFACE_NAME}:none nameserver=$DNS1 nameserver=$DNS2 inst.repo=$MIRROR inst.ks=hd:UUID=${ROOT_UUID}:${BOOT_PATH}${KSFName} inst.lang=en_US inst.keymap=us inst.vnc inst.rdp inst.rdp.username=root inst.rdp.password=changeme ${CONFIG_APPEND_LINE}
     ${INITRD_VAR} ${BOOT_PATH}initrd.img
 }
 # reinstall_menu_entry_end
