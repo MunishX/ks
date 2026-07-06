@@ -198,6 +198,16 @@ prepare_network() {
     GW=$(ip route | grep default | awk '{print $3}' | head -1)
     DNS1=8.8.8.8
     DNS2=8.8.4.4
+
+    # network ip details update via nmcli
+    # nmcli connection show
+    # nmcli connection modify "connection_name" ipv6.addresses "xxxx:xxxx:xxxx:xxxx::1/56"
+    # nmcli connection up "connection_name"
+    # ip a
+
+    # to add new ipv6
+    # nmcli connection modify <interface> +ipv6.addresses "xxxx:xxxx::3/56"
+    
 }
 
 prepare_os(){
@@ -443,13 +453,14 @@ update_grub2_menu_list(){
     then
         grub2-mkconfig
         grub2-mkconfig --output=${grub_out_file}
-        #grubby --info=ALL
         #grub2-mkconfig --output=/boot/grub2/grub.cfg
 
-        #grubby --default-index
         grub2-reboot  "reinstall"
+        
+        # reset next boot command
+        # grub-editenv /boot/grub2/grubenv unset next_entry
+        
         #grubby --default-index
-
         #grub2-set-default "My Custom Rocky Linux"
 
         grub2-editenv list
