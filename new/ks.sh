@@ -259,7 +259,7 @@ prepare_uuid(){
     ROOT_UUID_LINE="search --no-floppy --fs-uuid --set=root ${ROOT_UUID}"
 
     IS_RAID=0
-    if mdadm --detail ${ROOT_DEV} | grep -E '/dev/'; then
+    if mdadm --detail ${ROOT_DEV} > /dev/null 2>&1; then
         IS_RAID=1
         ROOT_MDUUID=mdadm --detail ${ROOT_DEV} | grep -E '/dev/' | awk 'NR==2 {print $7}'
         ROOT_MDUUID_CLEAN="${ROOT_MDUUID//-/}"
