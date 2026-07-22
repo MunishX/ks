@@ -6,7 +6,7 @@
 ###  constants  ###
 ###################
 HOSTNAME="host"
-REQUIRED_SPACE_MB=700
+REQUIRED_SPACE_MB=500
 
 ###################
 ###  functions  ###
