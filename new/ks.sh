@@ -87,10 +87,10 @@ detect_boot_mode(){
 
 detect_disk(){
     if lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,LABEL,PARTUUID,UUID,PTTYPE >/dev/null 2>&1; then 
-        echo "[info] Disk Partition TYPE: GPT"
+        #echo "[info] Disk Partition TYPE: GPT"
         lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,LABEL,PARTUUID,UUID,PTTYPE
     else
-        echo "[info] Disk Partition TYPE: MBR"
+        #echo "[info] Disk Partition TYPE: DOS"
         lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,LABEL,PARTUUID,UUID
     fi
 }
